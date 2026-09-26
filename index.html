@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BLACK CROWN | Barbería Premium — Reserva tu cita en línea</title>
+  <meta name="description" content="BLACK CROWN — Barbería premium. Cortes, fades, barba y servicios exclusivos. Reserva tu cita en línea, sin crear cuenta.">
+  <meta name="theme-color" content="#080808">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="BLACK CROWN | Barbería Premium">
+  <meta property="og:description" content="Tu estilo. Tu corona. Reserva tu cita en BLACK CROWN.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BLACK CROWN | Barbería Premium">
+  <meta name="twitter:description" content="Tu estilo. Tu corona. Reserva tu cita en BLACK CROWN.">
+  <!-- Al publicar: agrega <link rel="canonical" href="https://TU-DOMINIO/"> y <meta property="og:image" content="https://TU-DOMINIO/og.jpg"> -->
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23080808'/%3E%3Ctext x='50' y='70' font-size='58' text-anchor='middle' fill='%23d7a84b'%3E♛%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== VARIABLES ========== */
+    :root {
+      --bg: #080808;
+      --bg-soft: #0e0e10;
+      --card: #141416;
+      --gold: #d7a84b;
+      --gold-light: #f1d17c;
+      --white: #f5f5f5;
+      --gray: #a5a5aa;
+      --border: #29292e;
+      --success: #4bc889;
+      --danger: #e85b68;
+      --radius: 16px;
+    }
+
+    /* ========== RESET ========== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    :focus-visible { outline: 3px solid var(--gold-light); outline-offset: 3px; border-radius: 6px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .skip-link {
+      position: fixed; left: 12px; top: -60px; z-index: 1000;
+      background: var(--gold); color: #000; padding: 10px 16px; border-radius: 8px; font-weight: 700;
+    }
+    .skip-link:focus { top: 12px; }
+    body.modal-open { overflow: hidden; }
+
+    /* ========== UTILIDADES ========== */
+    .container { width: min(1180px, 92%); margin: auto; }
+    .section { padding: 100px 0; }
+    .dark-section { background: var(--bg-soft); }
+    .gold { color: var(--gold-light); }
+    .muted { color: var(--gray); }
+    .eyebrow { color: var(--gold-light); text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 800; }
+    h1, h2, h3 { font-family: "Playfair Display", serif; line-height: 1.1; }
+    h2 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin: 10px 0 15px; }
+    .section-head { max-width: 700px; margin-bottom: 40px; }
+    .todo { background: #ffe066; color: #000; padding: 0 5px; border-radius: 4px; font-weight: 600; }
+
+    /* ========== BOTONES ========== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 21px; border-radius: 10px;
+      background: var(--gold); color: #090909; border: 1px solid var(--gold);
+      font-weight: 800; transition: .25s ease;
+    }
+    .btn:hover { transform: translateY(-3px); background: var(--gold-light); box-shadow: 0 12px 30px rgba(215,168,75,.18); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn.ghost { background: transparent; color: #fff; }
+    .btn.ghost:hover { background: #fff; color: #000; border-color: #fff; }
+    .btn.danger { background: transparent; border-color: var(--danger); color: #ff9ba5; }
+    .btn.danger:hover { background: var(--danger); color: #000; }
+    .btn.small { padding: 9px 13px; font-size: .82rem; }
+    .link-btn { background: none; border: none; color: var(--gray); text-decoration: underline; font-size: .85rem; padding: 4px 0; }
+    .link-btn:hover { color: var(--gold-light); }
+
+    /* ========== HEADER ========== */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(8,8,8,.72); backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent; transition: .3s;
+    }
+    .site-header.scrolled { background: rgba(8,8,8,.95); border-color: var(--border); }
+    .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .logo { font-family: "Playfair Display", serif; font-size: 1.55rem; font-weight: 800; letter-spacing: .08em; }
+    .logo span { color: var(--gold-light); }
+    .navlinks { display: flex; align-items: center; gap: 26px; color: #ddd; font-size: .9rem; }
+    .navlinks a { position: relative; }
+    .navlinks a::after { content: ""; position: absolute; left: 0; bottom: -7px; width: 0; height: 2px; background: var(--gold); transition: .25s; }
+    .navlinks a:hover::after { width: 100%; }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .mobile-menu { display: none; border: none; background: transparent; color: #fff; font-size: 1.7rem; padding: 4px 8px; }
+
+    /* ========== HERO ========== */
+    .hero {
+      min-height: 100vh; display: grid; place-items: center; padding: 130px 0 80px;
+      background-color: #111;
+      background-image:
+        linear-gradient(90deg, rgba(0,0,0,.94), rgba(0,0,0,.58)),
+        url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1800&q=80");
+      background-position: center; background-size: cover;
+      position: relative;
+    }
+    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 180px; background: linear-gradient(transparent, var(--bg)); }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+    .hero h1 { font-size: clamp(3.6rem, 10vw, 8rem); letter-spacing: .02em; margin: 15px 0; }
+    .hero h1 span { color: var(--gold-light); }
+    .hero p { max-width: 630px; color: #d2d2d5; font-size: 1.05rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 40px; margin-top: 40px; }
+    .stat strong { display: block; font-size: 1.7rem; color: var(--gold-light); }
+    .stat span { color: var(--gray); font-size: .8rem; }
+
+    /* ========== NOSOTROS ========== */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-image {
+      min-height: 530px; border-radius: 22px; background-color: #17171a;
+      background-image: url("https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1000&q=80");
+      background-position: center; background-size: cover; box-shadow: 0 30px 80px #000;
+    }
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+    .feature { background: linear-gradient(145deg, #171719, #0d0d0f); border: 1px solid var(--border); border-radius: 15px; padding: 20px; }
+    .feature strong { display: block; margin-bottom: 5px; }
+    .feature span { color: var(--gray); font-size: .86rem; }
+
+    /* ========== SERVICIOS ========== */
+    .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .service-card {
+      position: relative; overflow: hidden;
+      background: linear-gradient(145deg, #171719, #0d0d0f);
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: .3s;
+    }
+    .service-card:hover { transform: translateY(-5px); border-color: rgba(215,168,75,.55); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+    .service-card::after { content: ""; position: absolute; width: 130px; height: 130px; right: -50px; bottom: -60px; border-radius: 50%; background: rgba(215,168,75,.07); pointer-events: none; }
+    .service-top { display: flex; justify-content: space-between; gap: 15px; }
+    .service-card h3 { font-size: 1.2rem; }
+    .price { color: var(--gold-light); font-weight: 800; white-space: nowrap; }
+    .duration { color: var(--gray); font-size: .8rem; margin: 8px 0 18px; }
+    .price-note { margin-top: 20px; color: var(--gray); font-size: .82rem; }
+
+    /* ========== EQUIPO ========== */
+    .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+    .team-card { text-align: center; padding: 26px 18px; background: linear-gradient(145deg, #161618, #0e0e10); border: 1px solid var(--border); border-radius: var(--radius); }
+    .avatar {
+      width: 74px; height: 74px; margin: 0 auto 14px; border-radius: 50%;
+      display: grid; place-items: center; font-family: "Playfair Display", serif; font-size: 1.9rem; font-weight: 700;
+      color: #090909; background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    }
+
+    /* ========== GALERÍA ========== */
+    .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .gallery figure { border-radius: 14px; overflow: hidden; background: linear-gradient(145deg, #1b1b1e, #0f0f11); aspect-ratio: 4/5; }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.2); transition: .35s; }
+    .gallery img:hover { transform: scale(1.03); filter: grayscale(0); }
+    .gallery figure.broken { display: grid; place-items: center; color: var(--gold); font-size: 2.4rem; }
+
+    /* ========== FAQ ========== */
+    .faq { max-width: 860px; display: grid; gap: 10px; }
+    .faq details { background: #111113; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; color: var(--gold-light); font-size: 1.3rem; line-height: 1; }
+    .faq details[open] summary::after { content: "–"; }
+    .faq details p { margin-top: 10px; color: var(--gray); font-size: .94rem; }
+
+    /* ========== RESERVA ========== */
+    .booking-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: 35px; align-items: start; }
+    .booking-copy { position: sticky; top: 110px; }
+    .steps { margin-top: 22px; display: grid; gap: 12px; list-style: none; counter-reset: s; }
+    .steps li { counter-increment: s; display: flex; gap: 12px; color: var(--gray); font-size: .92rem; }
+    .steps li::before { content: counter(s); flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: #000; font-weight: 800; font-size: .8rem; }
+    .form { background: #111113; border: 1px solid var(--border); border-radius: 20px; padding: 26px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .field { margin-bottom: 3px; }
+    .full { grid-column: 1 / -1; }
+    label { display: block; color: #d5d5d8; font-size: .82rem; margin-bottom: 7px; }
+    input, select {
+      width: 100%; padding: 13px 14px; background: #08080a; border: 1px solid #303035;
+      border-radius: 10px; color: #fff; outline: none; transition: .2s;
+    }
+    input:focus, select:focus { border-color: var(--gold); }
+    input[type="date"], input[type="time"] { color-scheme: dark; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .check { display: flex; gap: 9px; align-items: flex-start; color: var(--gray); font-size: .8rem; margin: 10px 0 8px; }
+    .check input { width: auto; margin-top: 5px; }
+    .fine { color: var(--gray); font-size: .76rem; margin: 6px 0 16px; }
+    .notice { padding: 12px 14px; border-radius: 10px; margin-bottom: 15px; background: #18181b; border: 1px solid var(--border); font-size: .88rem; }
+    .notice.ok { border-color: #276a4b; color: #9be0bd; }
+    .notice.err { border-color: #73333b; color: #ffb0b7; }
+    .notice a { text-decoration: underline; font-weight: 700; }
+    .demo-banner { background: #2a2110; border: 1px solid #5a4516; color: #f1d17c; padding: 10px 14px; border-radius: 10px; font-size: .82rem; margin-bottom: 18px; }
+
+    /* ========== CONTACTO ========== */
+    .contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .contact-card { background: linear-gradient(145deg, #161618, #0e0e10); border: 1px solid var(--border); border-radius: 16px; padding: 25px; }
+    .contact-card h3 { margin-bottom: 8px; font-size: 1.15rem; }
+    .contact-card .btn { margin-top: 12px; }
+    .hours { list-style: none; font-size: .88rem; color: var(--gray); }
+    .hours li { display: flex; justify-content: space-between; gap: 14px; padding: 3px 0; }
+    .socials { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+    .socials a { color: var(--gold-light); text-decoration: underline; }
+
+    /* ========== LEGAL ========== */
+    .legal { max-width: 900px; }
+    .legal h3 { margin-top: 30px; margin-bottom: 8px; font-size: 1.3rem; }
+    .legal p, .legal li { color: var(--gray); }
+    .legal ul { padding-left: 20px; margin-top: 6px; }
+    .legal strong { color: #ddd; }
+
+    /* ========== FOOTER ========== */
+    footer { border-top: 1px solid var(--border); padding: 40px 0 90px; color: var(--gray); font-size: .9rem; }
+    .footer-grid { display: flex; justify-content: space-between; gap: 25px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+    .footer-links a:hover, .footer-links .link-btn:hover { color: var(--gold-light); }
+
+    /* ========== FLOTANTES ========== */
+    .fab { position: fixed; right: 16px; bottom: 16px; z-index: 90; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+    .fab a { box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+    .fab .wa { background: #25d366; border-color: #25d366; color: #04210f; }
+    .fab .book { display: none; }
+    #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); z-index: 900; background: #1b1b1e; border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; opacity: 0; pointer-events: none; transition: .3s; max-width: 90vw; font-size: .9rem; }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ========== ANIMACIÓN ========== */
+    .js .reveal { opacity: 0; transform: translateY(25px); transition: .8s ease; }
+    .js .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========== MODAL LOGIN ========== */
+    .modal { position: fixed; inset: 0; z-index: 500; display: none; place-items: center; padding: 20px; background: rgba(0,0,0,.8); backdrop-filter: blur(8px); }
+    .modal.show { display: grid; }
+    .modal-box { width: min(450px, 100%); background: #121214; border: 1px solid var(--border); border-radius: 20px; padding: 28px; position: relative; box-shadow: 0 30px 80px #000; }
+    .close { position: absolute; right: 12px; top: 8px; border: none; background: none; color: #fff; font-size: 1.8rem; padding: 4px 10px; }
+
+    /* ========== PANEL ADMIN ========== */
+    .admin { display: none; min-height: 100vh; background: #0b0b0d; }
+    .admin.show { display: block; }
+    body.is-admin .site-header, body.is-admin #publicApp, body.is-admin .fab { display: none; }
+    .admin-shell { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+    .sidebar { height: 100vh; position: sticky; top: 0; padding: 25px; border-right: 1px solid var(--border); background: #0b0b0d; }
+    .sidebar nav { display: grid; gap: 8px; margin-top: 35px; }
+    .side-btn { border: none; background: transparent; color: #aaa; text-align: left; padding: 12px; border-radius: 10px; transition: .2s; }
+    .side-btn:hover, .side-btn.active { background: #19191d; color: #fff; }
+    .admin-main { width: 100%; max-width: 1500px; padding: 35px; }
+    .admin-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 25px; }
+    .admin-top h2 { font-size: 2rem; margin: 6px 0 0; }
+    .admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    .metric { background: linear-gradient(145deg, #171719, #0e0e10); border: 1px solid var(--border); border-radius: 15px; padding: 22px; }
+    .metric span { color: var(--gray); font-size: .8rem; }
+    .metric strong { display: block; font-size: 1.9rem; color: var(--gold-light); margin-top: 5px; }
+    .admin-section { margin-top: 20px; }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; margin-top: 20px; }
+    table { width: 100%; min-width: 800px; border-collapse: collapse; background: #111113; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--border); text-align: left; font-size: .84rem; }
+    th { color: var(--gold-light); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+    .badge { display: inline-block; padding: 5px 9px; border-radius: 999px; background: #242428; color: #ddd; font-size: .7rem; }
+    .badge.pending { background: #3a3116; color: #f1d17c; }
+    .badge.confirmed { background: #15324a; color: #8cc8f5; }
+    .badge.completed { background: #143a29; color: #8de3b7; }
+    .badge.cancelled { background: #3d1a20; color: #ff9ba5; }
+    .row-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .barber-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+    .admin-card { background: linear-gradient(145deg, #171719, #0e0e10); border: 1px solid var(--border); border-radius: 15px; padding: 20px; }
+    .admin-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
+    .empty { padding: 30px; text-align: center; color: var(--gray); }
+    .sch-row { display: grid; grid-template-columns: 1.1fr .8fr 1fr 1fr; gap: 10px; align-items: center; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; background: #1e1e22; border: 1px solid var(--border); border-radius: 999px; padding: 5px 6px 5px 12px; font-size: .82rem; }
+    .chip button { border: none; background: #33333a; color: #fff; border-radius: 50%; width: 22px; height: 22px; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 950px) {
+      .navlinks { display: none; }
+      .mobile-menu { display: block; }
+      .navlinks.open { position: absolute; top: 76px; left: 0; right: 0; display: grid; gap: 14px; background: #0b0b0d; padding: 20px; border-bottom: 1px solid var(--border); }
+      .about, .booking-wrap { grid-template-columns: 1fr; }
+      .booking-copy { position: static; }
+      .services { grid-template-columns: 1fr 1fr; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .admin-shell { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+      .sidebar nav { display: flex; overflow-x: auto; }
+      .side-btn { white-space: nowrap; }
+      .admin-grid, .barber-grid { grid-template-columns: 1fr 1fr; }
+      .fab .book { display: inline-flex; }
+    }
+    @media (max-width: 600px) {
+      .section { padding: 70px 0; }
+      .features, .services, .form-grid, .barber-grid { grid-template-columns: 1fr; }
+      .about-image { min-height: 320px; }
+      .admin-main { padding: 20px; }
+      .sch-row { grid-template-columns: 1fr 1fr; }
+      .stats { gap: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; scroll-behavior: auto !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+
+<body>
+<a href="#reservar" class="skip-link">Ir a reservar</a>
+
+<!-- ========== HEADER ========== -->
+<header class="site-header" id="header">
+  <div class="container nav">
+    <a href="#inicio" class="logo" aria-label="BLACK CROWN, inicio">BLACK <span>CROWN</span></a>
+
+    <nav class="navlinks" id="navlinks" aria-label="Principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#galeria">Galería</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#preguntas">Preguntas</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#reservar" class="btn small">Reservar cita</a>
+      <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">☰</button>
+    </div>
+  </div>
+</header>
+
+<noscript>
+  <div style="background:#2a2110;color:#f1d17c;padding:14px;text-align:center;margin-top:76px">
+    Este sitio necesita JavaScript para mostrar servicios y reservar. Actívalo o contáctanos directamente.
+  </div>
+</noscript>
+
+<!-- ========== SITIO PÚBLICO ========== -->
+<main id="publicApp">
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="container hero-content reveal">
+      <div class="eyebrow">Barbería premium · Estilo sin límites</div>
+      <h1>Tu estilo.<br><span>Tu corona.</span></h1>
+      <p>BLACK CROWN combina barbería clásica, técnicas modernas y una experiencia premium para que salgas con un look que hable por ti.</p>
+
+      <div class="hero-actions">
+        <a href="#reservar" class="btn">Reservar cita</a>
+        <a href="#servicios" class="btn ghost">Ver servicios</a>
+      </div>
+
+      <div class="stats" id="heroStats" aria-label="Datos del negocio"></div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section class="section" id="nosotros">
+    <div class="container about">
+      <div class="about-image reveal" role="img" aria-label="Barbero realizando un corte"></div>
+
+      <div class="reveal">
+        <div class="eyebrow">La experiencia</div>
+        <h2>Una barbería hecha para <span class="gold">destacar.</span></h2>
+        <p class="muted">
+          Desde un fade limpio hasta un diseño especial, cuidamos cada detalle. BLACK CROWN está pensada para quienes quieren un servicio preciso,
+          ambiente premium y una imagen que los represente.
+        </p>
+
+        <div class="features">
+          <div class="feature"><strong>✦ Precisión</strong><span>Trabajo detallado y personalizado.</span></div>
+          <div class="feature"><strong>♛ Experiencia</strong><span>Servicios pensados para cada estilo.</span></div>
+          <div class="feature"><strong>⚡ Reserva fácil</strong><span>Agenda en pocos pasos, sin cuenta.</span></div>
+          <div class="feature"><strong>◈ Ambiente</strong><span>Una identidad oscura y elegante.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="section dark-section" id="servicios">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Menú BLACK CROWN</div>
+        <h2>Servicios que <span class="gold">mandan.</span></h2>
+        <p class="muted">Elige tu servicio y reserva en línea en menos de un minuto.</p>
+      </div>
+      <div class="services" id="servicesGrid" aria-live="polite"></div>
+      <p class="price-note" data-b="priceNote"></p>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="section" id="equipo" hidden>
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Nuestro equipo</div>
+        <h2>Manos que <span class="gold">saben.</span></h2>
+      </div>
+      <div class="team" id="teamGrid"></div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section class="section dark-section" id="galeria">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Nuestro trabajo</div>
+        <h2>Detalles que hablan.</h2>
+      </div>
+      <div class="gallery reveal" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- RESERVA -->
+  <section class="section" id="reservar">
+    <div class="container booking-wrap">
+      <div class="booking-copy reveal">
+        <div class="eyebrow">Agenda online</div>
+        <h2>Reserva tu <span class="gold">cita.</span></h2>
+        <p class="muted">Elige tu servicio, barbero, fecha y horario. No necesitas crear una cuenta y no se realiza ningún cobro en línea.</p>
+        <ol class="steps">
+          <li>Elige servicio y barbero.</li>
+          <li>Selecciona un horario disponible.</li>
+          <li>Recibes tu solicitud y el negocio la confirma.</li>
+        </ol>
+      </div>
+
+      <form class="form reveal" id="bookingForm" novalidate>
+        <div id="demoBanner"></div>
+        <div id="bookingMessage" role="status" aria-live="polite"></div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="clientName">Nombre</label>
+            <input id="clientName" maxlength="80" minlength="2" required autocomplete="name" placeholder="Tu nombre">
+          </div>
+
+          <div class="field">
+            <label for="clientPhone">Teléfono</label>
+            <input id="clientPhone" maxlength="20" required inputmode="tel" autocomplete="tel" placeholder="55 0000 0000">
+          </div>
+
+          <div class="field">
+            <label for="serviceSelect">Servicio</label>
+            <select id="serviceSelect" required><option value="">Selecciona un servicio</option></select>
+          </div>
+
+          <div class="field">
+            <label for="workerSelect">Barbero</label>
+            <select id="workerSelect" required><option value="">Selecciona un barbero</option></select>
+          </div>
+
+          <div class="field">
+            <label for="dateSelect">Fecha</label>
+            <input id="dateSelect" type="date" required>
+          </div>
+
+          <div class="field">
+            <label for="timeSelect">Hora</label>
+            <select id="timeSelect" required><option value="">Selecciona servicio, barbero y fecha</option></select>
+          </div>
+
+          <!-- Anti-spam (los humanos no lo ven) -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">No llenar</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="full check">
+            <input id="privacyCheck" type="checkbox" required>
+            <label for="privacyCheck" style="margin:0;color:inherit;font-size:inherit">
+              He leído el <a href="#privacidad" class="gold" style="text-decoration:underline">Aviso de Privacidad</a> y acepto el tratamiento de mis datos para gestionar mi reservación.
+              Si la cita es para un menor de edad, declaro ser su madre, padre o tutor.
+            </label>
+          </div>
+        </div>
+
+        <p class="fine">
+          Aviso de privacidad simplificado: <strong data-b="legalName"></strong> usa tu nombre y teléfono solo para registrar, confirmar y administrar tu cita
+          y contactarte sobre ella. No vendemos tus datos ni los usamos para publicidad. Consulta el aviso completo y cómo ejercer tus derechos ARCO en la sección de Aviso de Privacidad.
+        </p>
+
+        <button class="btn" type="submit" id="bookingSubmit" style="width:100%">Solicitar cita</button>
+        <p class="fine" style="margin-top:12px">Tu cita queda <strong>pendiente</strong> hasta que el negocio la confirme.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section dark-section" id="preguntas">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Preguntas frecuentes</div>
+        <h2>Antes de venir.</h2>
+      </div>
+      <div class="faq reveal" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="section" id="contacto">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Contacto</div>
+        <h2>Nos vemos en BLACK CROWN.</h2>
+      </div>
+      <div class="contact reveal" id="contactGrid"></div>
+    </div>
+  </section>
+
+  <!-- AVISO DE PRIVACIDAD -->
+  <section class="section dark-section" id="privacidad">
+    <div class="container legal">
+      <div class="eyebrow">Legal</div>
+      <h2>Aviso de Privacidad</h2>
+      <p class="muted">Conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p>
+
+      <h3>1. Responsable</h3>
+      <p><strong data-b="legalName"></strong>, con nombre comercial <strong data-b="name"></strong> y domicilio en <span data-b="address"></span>, es responsable del tratamiento de los datos personales que se recaben a través de este sitio.</p>
+
+      <h3>2. Datos personales que recabamos</h3>
+      <ul>
+        <li>Datos de identificación y contacto: nombre y número telefónico.</li>
+        <li>Datos de la reservación: servicio, barbero, fecha y hora.</li>
+      </ul>
+      <p>No solicitamos datos personales sensibles, financieros ni patrimoniales. No se realizan cobros en este sitio.</p>
+
+      <h3>3. Finalidades del tratamiento</h3>
+      <p><strong>Finalidades necesarias:</strong> registrar, confirmar, administrar, modificar o cancelar tu cita; contactarte sobre ella; llevar el control interno de la agenda y cumplir obligaciones legales aplicables.</p>
+      <p><strong>Finalidades adicionales:</strong> no utilizamos tus datos para mercadotecnia, publicidad ni prospección comercial.</p>
+
+      <h3>4. Menores de edad</h3>
+      <p>Los servicios para menores deben ser solicitados por su madre, padre o tutor, quien otorga el consentimiento para el tratamiento de los datos del menor.</p>
+
+      <h3>5. Transferencias y encargados</h3>
+      <p>No transferimos tus datos a terceros, salvo requerimiento de autoridad competente. Para operar el sitio utilizamos servicios de infraestructura (Google Firebase / Google Cloud) que almacenan la información como encargado, bajo medidas de seguridad, y que pueden procesar datos en servidores ubicados fuera de México.</p>
+
+      <h3>6. Derechos ARCO y revocación del consentimiento</h3>
+      <p>Puedes solicitar el <strong>Acceso</strong>, <strong>Rectificación</strong>, <strong>Cancelación</strong> u <strong>Oposición</strong> al tratamiento de tus datos, así como revocar tu consentimiento, enviando un correo a <span data-b="privacyEmail"></span> con tu nombre, medio para responderte, descripción clara de tu solicitud y un documento que acredite tu identidad. Responderemos en un plazo máximo de 20 días hábiles.</p>
+      <p>Si consideras que tu derecho fue vulnerado, puedes acudir ante la Secretaría Anticorrupción y Buen Gobierno (autoridad en materia de protección de datos personales).</p>
+
+      <h3>7. Conservación</h3>
+      <p>Conservamos los datos de tus citas durante <span data-b="retentionMonths"></span> meses posteriores a la fecha de la cita y después se eliminan, salvo que una ley exija conservarlos por más tiempo.</p>
+
+      <h3>8. Cookies y tecnologías similares</h3>
+      <p>Este sitio no utiliza cookies de publicidad ni de analítica. El área privada del personal usa almacenamiento técnico estrictamente necesario para mantener la sesión. Al cargar el sitio, tu navegador solicita tipografías a Google Fonts, lo que puede revelar tu dirección IP a ese proveedor.</p>
+
+      <h3>9. Cambios a este aviso</h3>
+      <p>Cualquier cambio se publicará en esta misma página. Última actualización: <span data-b="privacyUpdated"></span>.</p>
+    </div>
+  </section>
+
+  <!-- TÉRMINOS -->
+  <section class="section" id="terminos">
+    <div class="container legal">
+      <div class="eyebrow">Legal</div>
+      <h2>Términos y condiciones</h2>
+
+      <h3>Proveedor</h3>
+      <p><strong data-b="legalName"></strong> · <span data-b="address"></span> · Tel. <span data-b="phone"></span> · <span data-b="email"></span></p>
+
+      <h3>Reservaciones</h3>
+      <p>La solicitud de una cita está sujeta a la disponibilidad mostrada por el sistema y a la confirmación del negocio. Mientras no sea confirmada, la cita permanece como pendiente. No se requiere anticipo ni se realiza ningún cobro en línea.</p>
+
+      <h3>Precios</h3>
+      <p><span data-b="priceNote"></span> El precio se paga en el establecimiento al recibir el servicio.</p>
+
+      <h3>Cancelaciones y reprogramaciones</h3>
+      <p data-b="cancellationPolicy"></p>
+
+      <h3>Retrasos</h3>
+      <p>Contamos con <span data-b="toleranceMinutes"></span> minutos de tolerancia. Pasado ese tiempo, el negocio podrá reprogramar o ajustar el servicio según la disponibilidad de la agenda.</p>
+
+      <h3>Uso del sitio</h3>
+      <p>Al reservar, declaras que los datos que proporcionas son verdaderos. El negocio puede cancelar solicitudes con datos falsos o uso indebido del sistema.</p>
+
+      <h3>Quejas</h3>
+      <p>Para aclaraciones puedes escribirnos a <span data-b="email"></span>. También puedes acudir a la Procuraduría Federal del Consumidor (Profeco).</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong style="color:#fff">BLACK CROWN</strong>
+        <div>Barbería premium.</div>
+        <div style="font-size:.8rem;margin-top:6px"><span data-b="legalName"></span></div>
+      </div>
+
+      <nav class="footer-links" aria-label="Legal">
+        <a href="#privacidad">Aviso de Privacidad</a>
+        <a href="#terminos">Términos</a>
+        <a href="#reservar">Reservar</a>
+        <button class="link-btn" id="loginBtn" type="button">Acceso del equipo</button>
+      </nav>
+
+      <div>© <span id="year"></span> BLACK CROWN. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+</main>
+
+<!-- ========== FLOTANTES ========== -->
+<div class="fab" id="fab">
+  <a href="#reservar" class="btn book">Reservar</a>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ========== LOGIN ========== -->
+<div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="modal-box">
+    <button class="close" id="closeLogin" type="button" aria-label="Cerrar">×</button>
+    <div class="eyebrow">Acceso del equipo</div>
+    <h2 id="loginTitle" style="font-size:2rem;margin-top:8px">Ingresa a tu cuenta</h2>
+    <p class="muted" style="margin-bottom:20px;font-size:.9rem">Solo para propietario y barberos autorizados.</p>
+
+    <form id="loginForm">
+      <div id="loginMessage" role="status" aria-live="polite"></div>
+      <div class="field" style="margin-bottom:12px">
+        <label for="loginEmail">Correo</label>
+        <input id="loginEmail" type="email" required autocomplete="username">
+      </div>
+      <div class="field" style="margin-bottom:16px">
+        <label for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+      </div>
+      <button class="btn" style="width:100%" id="loginSubmit">Entrar</button>
+      <button class="link-btn" type="button" id="resetPass" style="margin-top:12px">¿Olvidaste tu contraseña?</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== PANEL ADMIN ========== -->
+<section class="admin" id="adminApp" aria-label="Panel privado">
+  <div class="admin-shell">
+
+    <aside class="sidebar">
+      <a class="logo" href="#">BLACK <span>CROWN</span></a>
+      <nav aria-label="Panel">
+        <button class="side-btn active" data-panel="dashboard">Dashboard</button>
+        <button class="side-btn" data-panel="appointments">Citas</button>
+        <button class="side-btn" data-panel="workers" data-owner-only>Barberos</button>
+        <button class="side-btn" data-panel="services" data-owner-only>Servicios</button>
+        <button class="side-btn" data-panel="schedule" data-owner-only>Horarios</button>
+      </nav>
+      <button class="btn danger small" id="logoutBtn" style="margin-top:25px;width:100%">Cerrar sesión</button>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <div>
+          <div class="eyebrow" id="roleLabel">Panel privado</div>
+          <h2 id="panelTitle">Dashboard</h2>
+        </div>
+        <span class="badge" id="userEmailLabel"></span>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <div class="admin-grid">
+          <div class="metric"><span>Citas activas</span><strong id="mTotal">0</strong></div>
+          <div class="metric"><span>Pendientes</span><strong id="mPending">0</strong></div>
+          <div class="metric"><span>Completadas</span><strong id="mDone">0</strong></div>
+          <div class="metric"><span>Ingresos (completadas)</span><strong id="mIncome">$0</strong></div>
+        </div>
+        <div class="admin-card admin-section">
+          <h3>Próximas citas</h3>
+          <div id="dashboardUpcoming"></div>
+        </div>
+      </div>
+
+      <!-- CITAS -->
+      <div class="admin-panel" id="panel-appointments">
+        <div class="admin-card">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input id="appointmentSearch" placeholder="Buscar nombre o teléfono" aria-label="Buscar cita" style="max-width:320px">
+            <select id="statusFilter" aria-label="Filtrar por estado" style="max-width:220px">
+              <option value="">Todos los estados</option>
+              <option value="pending">Pendientes</option>
+              <option value="confirmed">Confirmadas</option>
+              <option value="completed">Completadas</option>
+              <option value="cancelled">Canceladas</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Fecha</th><th>Hora</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="appointmentsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- BARBEROS -->
+      <div class="admin-panel" id="panel-workers" data-owner-panel>
+        <div class="admin-card">
+          <h3>Barberos</h3>
+          <p class="muted" style="font-size:.88rem">
+            Aquí defines quién aparece en la reserva. Para que un barbero pueda entrar al panel, crea su usuario en Firebase Authentication
+            y un documento en <code>usuarios/&lt;UID&gt;</code> (rol <code>barbero</code>, activo <code>true</code>); luego pega su UID aquí.
+          </p>
+          <form id="workerForm" class="form-grid" style="margin-top:18px">
+            <div class="field"><label for="workerName">Nombre</label><input id="workerName" maxlength="60" minlength="2" required></div>
+            <div class="field"><label for="workerUid">UID de su cuenta (opcional)</label><input id="workerUid" maxlength="128"></div>
+            <div class="full"><button class="btn">Agregar barbero</button></div>
+          </form>
+          <div id="workersList" class="barber-grid"></div>
+        </div>
+      </div>
+
+      <!-- SERVICIOS -->
+      <div class="admin-panel" id="panel-services" data-owner-panel>
+        <div class="admin-card">
+          <h3>Servicios</h3>
+          <form id="serviceForm" class="form-grid" style="margin-top:20px">
+            <input type="hidden" id="serviceId">
+            <div class="field"><label for="serviceName">Nombre</label><input id="serviceName" maxlength="80" minlength="2" required></div>
+            <div class="field"><label for="servicePrice">Precio MXN (IVA incluido)</label><input id="servicePrice" type="number" min="0" max="100000" required></div>
+            <div class="field"><label for="serviceDuration">Duración (min, máx. 180)</label><input id="serviceDuration" type="number" min="5" max="180" step="5" required></div>
+            <div class="field">
+              <label for="serviceActive">Visible al público</label>
+              <select id="serviceActive"><option value="true">Sí</option><option value="false">No</option></select>
+            </div>
+            <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn">Guardar servicio</button>
+              <button class="btn ghost" type="button" id="clearService">Limpiar</button>
+              <button class="btn ghost" type="button" id="seedServices">Cargar servicios de ejemplo</button>
+            </div>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Servicio</th><th>Precio</th><th>Duración</th><th>Visible</th><th>Acciones</th></tr></thead>
+              <tbody id="servicesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- HORARIOS -->
+      <div class="admin-panel" id="panel-schedule" data-owner-panel>
+        <div class="admin-card">
+          <h3>Horarios</h3>
+          <p class="muted" style="font-size:.88rem">Apertura y cierre de cada día. Los clientes solo verán huecos dentro de este horario.</p>
+          <div id="scheduleGrid" style="display:grid;gap:12px;margin-top:20px"></div>
+
+          <h3 style="margin-top:30px;font-size:1.1rem">Fechas bloqueadas (feriados, vacaciones)</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <input type="date" id="blockDate" aria-label="Fecha a bloquear" style="max-width:220px">
+            <button class="btn ghost small" type="button" id="addBlock">Bloquear fecha</button>
+          </div>
+          <div class="chips" id="blockedChips"></div>
+
+          <button class="btn" id="saveSchedule" style="margin-top:24px">Guardar horarios</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+
+<!-- ========== FIREBASE + JAVASCRIPT ========== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs, getDoc, doc, addDoc, setDoc, writeBatch,
+    query, where, serverTimestamp, Timestamp
+  } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  /* =====================================================
+     1) DATOS DEL NEGOCIO  — EDITA SOLO ESTE BLOQUE
+     Todo lo que dejes vacío aparece resaltado en amarillo
+     en el sitio para que no se te olvide llenarlo.
+  ===================================================== */
+  const BUSINESS = {
+    name: "BLACK CROWN",
+    legalName: "",        // Nombre completo (persona física) o razón social
+    address: "",          // Calle, número, colonia, CP, ciudad, estado
+    phone: "",            // Ej. 55 1234 5678
+    whatsapp: "",         // Solo dígitos con lada país. Ej. 5215512345678 (opcional)
+    email: "",            // Correo de contacto del negocio
+    privacyEmail: "",     // Correo para solicitudes ARCO (puede ser el mismo)
+    mapsUrl: "",          // Enlace de Google Maps (opcional, https://...)
+    instagram: "",        // URL completa (opcional)
+    facebook: "",         // URL completa (opcional)
+    tiktok: "",           // URL completa (opcional)
+
+    priceNote: "Precios en pesos mexicanos (MXN), IVA incluido.",
+    cancellationPolicy: "Puedes cancelar o reprogramar tu cita avisando por teléfono o WhatsApp con al menos 2 horas de anticipación. No se realiza ningún cargo por cancelar.",
+    toleranceMinutes: 10,
+    retentionMonths: 12,          // Meses que se conservan los datos de una cita
+    privacyUpdated: "24 de septiembre de 2026",
+    privacyVersion: "2026-09",    // Cámbiala si modificas el aviso
+
+    bookingWindowDays: 45,        // Cuántos días hacia adelante se puede reservar
+    minLeadMinutes: 60,           // Anticipación mínima para reservar el mismo día
+    slotStep: 15                  // Granularidad de horarios (minutos). No cambiar sin ajustar reglas
+  };
+
+  /* =====================================================
+     2) CONFIGURACIÓN DE FIREBASE — PEGA LA TUYA
+     Mientras tenga los valores de ejemplo, el sitio corre
+     en MODO DEMO (datos en memoria, sin base de datos).
+  ===================================================== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_AN9WhA97X_DxpCq-y0xOL58pgB6T-24",
+    authDomain: "black-crown-aeb4a.firebaseapp.com",
+    projectId: "black-crown-aeb4a",
+    storageBucket: "black-crown-aeb4a.firebasestorage.app",
+    messagingSenderId: "401970261828",
+    appId: "1:401970261828:web:f76d6a7ea72994b69d7111"
+  };
+
+  /* Galería: cambia por tus propias fotos (con permiso de las personas que aparecen) */
+  const GALLERY = [
+    { src: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=75", alt: "Herramientas de barbería" },
+    { src: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=75", alt: "Barbero realizando un corte" },
+    { src: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=800&q=75", alt: "Interior de barbería" },
+    { src: "https://images.unsplash.com/photo-1599351431202-1e0f0e4e3c2f?auto=format&fit=crop&w=800&q=75", alt: "Corte de cabello y barba" }
+  ];
+
+  /* ===================================================== */
+
+  const DEMO = Object.values(firebaseConfig).some(v => /PEGA_AQUI|TU-PROYECTO/.test(v));
+  let auth = null, db = null;
+  if (!DEMO) {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  }
+
+  const DEFAULT_SERVICES = [
+    ["Corte Masculino", 180, 45], ["Corte para Niño", 150, 45], ["Fade / Degradado", 220, 60],
+    ["Taper Fade", 220, 60], ["Diseño de Barba", 150, 30], ["Facial", 180, 45],
+    ["Exfoliación", 150, 30], ["Combo Premium", 350, 90], ["Mullet", 220, 60], ["Diseño Especial", 280, 75]
+  ].map(([name, price, duration]) => ({ name, price, duration, active: true }));
+
+  const DEFAULT_DAYS = {
+    lunes:     { active: true,  start: "09:00", end: "18:00" },
+    martes:    { active: true,  start: "09:00", end: "18:00" },
+    miercoles: { active: true,  start: "09:00", end: "18:00" },
+    jueves:    { active: true,  start: "09:00", end: "18:00" },
+    viernes:   { active: true,  start: "09:00", end: "18:00" },
+    sabado:    { active: true,  start: "09:00", end: "14:00" },
+    domingo:   { active: false, start: "09:00", end: "14:00" }
+  };
+  const DAY_KEYS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  const DAY_LABEL = { lunes: "Lunes", martes: "Martes", miercoles: "Miércoles", jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo" };
+  const LABELS = {
+    legalName: "NOMBRE LEGAL / RAZÓN SOCIAL", address: "DOMICILIO", phone: "TELÉFONO",
+    email: "CORREO", privacyEmail: "CORREO DE PRIVACIDAD"
+  };
+  const STEP = BUSINESS.slotStep;
+
+  let services = [], workers = [], appointments = [];
+  let config = { days: DEFAULT_DAYS, blockedDates: [] };
+  let currentUser = null, currentProfile = null, refreshToken = 0, lastFocus = null;
+
+  /* ---------- Utilidades ---------- */
+  const $ = id => document.getElementById(id);
+  const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+  const money = n => new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(Number(n) || 0);
+  const pad = n => String(n).padStart(2, "0");
+  const toDateStr = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const todayString = () => toDateStr(new Date());
+  const dateObj = s => new Date(`${s}T00:00:00`);
+  const minToTime = m => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+  const timeToMin = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "";
+  const digits = s => String(s || "").replace(/\D/g, "");
+  const prettyDate = s => dateObj(s).toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+  const fieldHtml = key => {
+    const v = BUSINESS[key];
+    return (v !== undefined && v !== "") ? esc(v) : `<mark class="todo">[${esc(LABELS[key] || key)}]</mark>`;
+  };
+
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 3800);
+  }
+
+  function showMsg(el, message, type = "", extraHtml = "") {
+    el.innerHTML = message ? `<div class="notice ${type}">${esc(message)}${extraHtml}</div>` : "";
+  }
+
+  /* =====================================================
+     CAPA DE DATOS (Firebase o Demo en memoria)
+  ===================================================== */
+  const mem = { slots: new Set(), citas: [] };
+  const slotId = (workerId, date, time) => `${workerId}_${date}_${time.replace(":", "")}`;
+
+  const data = {
+    async services() {
+      if (DEMO) return DEFAULT_SERVICES.map((s, i) => ({ id: "demo" + i, ...s }));
+      const snap = await getDocs(query(collection(db, "servicios"), where("active", "==", true)));
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+    async barbers() {
+      if (DEMO) return [{ id: "demo-1", nombre: "Barbero de ejemplo 1", activo: true }, { id: "demo-2", nombre: "Barbero de ejemplo 2", activo: true }];
+      const snap = await getDocs(query(collection(db, "barberos"), where("activo", "==", true)));
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+    async config() {
+      if (DEMO) return { days: DEFAULT_DAYS, blockedDates: [] };
+      const snap = await getDoc(doc(db, "configuracion", "general"));
+      return snap.exists() ? snap.data() : { days: DEFAULT_DAYS, blockedDates: [] };
+    },
+    async busy(date, workerId) {
+      if (DEMO) {
+        const s = new Set();
+        mem.slots.forEach(k => { const [w, d, t] = k.split("_"); if (w === workerId && d === date) s.add(`${t.slice(0, 2)}:${t.slice(2)}`); });
+        return s;
+      }
+      const snap = await getDocs(query(collection(db, "ocupados"), where("date", "==", date), where("workerId", "==", workerId)));
+      return new Set(snap.docs.map(d => d.data().time));
+    },
+    /* Crea la cita + sus horarios en UN solo lote atómico. Si un horario ya existe, todo falla. */
+    async createBooking(p, times) {
+      const ids = times.map(t => slotId(p.workerId, p.date, t));
+      if (DEMO) {
+        if (ids.some(i => mem.slots.has(i))) { const e = new Error("conflict"); e.code = "permission-denied"; throw e; }
+        ids.forEach(i => mem.slots.add(i));
+        const id = "DEMO" + Math.random().toString(36).slice(2, 8);
+        mem.citas.push({ id, ...p });
+        return id;
+      }
+      const citaRef = doc(collection(db, "citas"));
+      const [y, m, d] = p.date.split("-").map(Number);
+      const batch = writeBatch(db);
+      batch.set(citaRef, {
+        ...p, slotIds: ids, createdAt: serverTimestamp(),
+        deleteAfter: Timestamp.fromDate(new Date(y, m - 1 + BUSINESS.retentionMonths, d))
+      });
+      times.forEach((t, i) => batch.set(doc(db, "ocupados", ids[i]), {
+        workerId: p.workerId, date: p.date, time: t, citaId: citaRef.id,
+        expireAt: Timestamp.fromDate(new Date(y, m - 1, d + 2))
+      }));
+      await batch.commit();
+      return citaRef.id;
+    }
+  };
+
+  /* =====================================================
+     NEGOCIO → PÁGINA
+  ===================================================== */
+  function applyBusiness() {
+    document.querySelectorAll("[data-b]").forEach(el => { el.innerHTML = fieldHtml(el.dataset.b); });
+    $("year").textContent = new Date().getFullYear();
+
+    const missing = ["legalName", "address", "phone", "email", "privacyEmail"].filter(k => !BUSINESS[k]);
+    if (missing.length) console.warn("BLACK CROWN — faltan datos del negocio antes de publicar:", missing.join(", "));
+    if (DEMO) {
+      console.warn("BLACK CROWN — MODO DEMO: pega tu firebaseConfig para usar la base de datos real.");
+      $("demoBanner").innerHTML = `<div class="demo-banner"><strong>Modo demostración:</strong> las reservas se guardan solo en esta ventana y se pierden al recargar. Conecta Firebase para activarlas de verdad.</div>`;
+    }
+
+    /* Contacto */
+    const tel = digits(BUSINESS.phone);
+    const wa = digits(BUSINESS.whatsapp);
+    const maps = safeUrl(BUSINESS.mapsUrl);
+    const socials = [["Instagram", BUSINESS.instagram], ["Facebook", BUSINESS.facebook], ["TikTok", BUSINESS.tiktok]]
+      .filter(([, u]) => safeUrl(u))
+      .map(([n, u]) => `<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener noreferrer">${n}</a>`).join("");
+
+    $("contactGrid").innerHTML = `
+      <div class="contact-card">
+        <h3>📍 Ubicación</h3>
+        <p class="muted">${fieldHtml("address")}</p>
+        ${maps ? `<a class="btn small ghost" href="${esc(maps)}" target="_blank" rel="noopener noreferrer">Cómo llegar</a>` : ""}
+      </div>
+      <div class="contact-card">
+        <h3>☎ Teléfono</h3>
+        <p class="muted">${tel ? `<a href="tel:+${tel.length === 10 ? "52" : ""}${tel}" style="text-decoration:underline">${esc(BUSINESS.phone)}</a>` : fieldHtml("phone")}</p>
+        ${wa ? `<a class="btn small ghost" href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : ""}
+      </div>
+      <div class="contact-card">
+        <h3>✉ Correo</h3>
+        <p class="muted">${BUSINESS.email ? `<a href="mailto:${esc(BUSINESS.email)}" style="text-decoration:underline">${esc(BUSINESS.email)}</a>` : fieldHtml("email")}</p>
+        ${socials ? `<div class="socials">${socials}</div>` : ""}
+      </div>
+      <div class="contact-card"><h3>🕒 Horario</h3><ul class="hours" id="hoursList"></ul></div>`;
+
+    if (wa) {
+      $("fab").insertAdjacentHTML("afterbegin", `<a class="btn wa" href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp">WhatsApp</a>`);
+    }
+
+    /* Datos estructurados para Google (solo si hay datos reales) */
+    if (BUSINESS.address && BUSINESS.phone) {
+      const ld = { "@context": "https://schema.org", "@type": "HairSalon", name: BUSINESS.name, telephone: BUSINESS.phone, address: BUSINESS.address };
+      if (BUSINESS.email) ld.email = BUSINESS.email;
+      const s = document.createElement("script");
+      s.type = "application/ld+json";
+      s.textContent = JSON.stringify(ld);
+      document.head.appendChild(s);
+    }
+
+    /* FAQ */
+    const faqs = [
+      ["¿Necesito crear una cuenta?", "No. Solo eliges tu servicio, barbero y horario, y dejas tu nombre y teléfono."],
+      ["¿Cómo sé que mi cita está confirmada?", "Al reservar, tu cita queda como pendiente. El negocio la revisa y la confirma; si necesita ajustar algo, te contactará al teléfono que registraste."],
+      ["¿Hay que pagar en línea?", "No. No se realiza ningún cobro en el sitio; el servicio se paga en el establecimiento."],
+      ["¿Los precios incluyen IVA?", BUSINESS.priceNote],
+      ["¿Puedo cancelar o cambiar mi cita?", BUSINESS.cancellationPolicy],
+      ["¿Qué pasa si llego tarde?", `Tenemos ${BUSINESS.toleranceMinutes} minutos de tolerancia. Después, el servicio podría reprogramarse según la agenda.`],
+      ["¿Atienden niños?", "Sí, con el servicio Corte para Niño. La cita debe ser solicitada por su madre, padre o tutor."]
+    ];
+    $("faqList").innerHTML = faqs.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
+
+    /* Galería con respaldo si una imagen falla */
+    $("galleryGrid").innerHTML = GALLERY.map(g => `<figure><img loading="lazy" alt="${esc(g.alt)}" src="${esc(g.src)}"></figure>`).join("");
+    document.querySelectorAll("#galleryGrid img").forEach(img => {
+      img.addEventListener("error", () => { const f = img.closest("figure"); f.classList.add("broken"); f.innerHTML = "♛"; f.setAttribute("aria-hidden", "true"); });
+    });
+  }
+
+  function renderHours() {
+    const days = config.days || DEFAULT_DAYS;
+    const order = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+    const ul = $("hoursList");
+    if (!ul) return;
+    ul.innerHTML = order.map(k => {
+      const d = days[k] || DEFAULT_DAYS[k];
+      return `<li><span>${DAY_LABEL[k]}</span><span>${d.active ? `${esc(d.start)} – ${esc(d.end)}` : "Cerrado"}</span></li>`;
+    }).join("");
+  }
+
+  /* =====================================================
+     HEADER / ANIMACIONES
+  ===================================================== */
+  window.addEventListener("scroll", () => $("header").classList.toggle("scrolled", window.scrollY > 20), { passive: true });
+
+  $("mobileMenu").onclick = () => {
+    const open = $("navlinks").classList.toggle("open");
+    $("mobileMenu").setAttribute("aria-expanded", String(open));
+  };
+  document.querySelectorAll(".navlinks a").forEach(l => l.addEventListener("click", () => {
+    $("navlinks").classList.remove("open");
+    $("mobileMenu").setAttribute("aria-expanded", "false");
+  }));
+
+  const observer = ("IntersectionObserver" in window)
+    ? new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } }), { threshold: .12 })
+    : null;
+  const watchReveal = () => document.querySelectorAll(".reveal:not(.visible)").forEach(el => observer ? observer.observe(el) : el.classList.add("visible"));
+
+  /* =====================================================
+     SERVICIOS / EQUIPO (público)
+  ===================================================== */
+  function renderPublicServices() {
+    const grid = $("servicesGrid");
+    if (!services.length) {
+      grid.innerHTML = `<p class="muted">Nuestro menú de servicios estará disponible muy pronto.</p>`;
+    } else {
+      grid.innerHTML = services.map(s => `
+        <article class="service-card">
+          <div class="service-top">
+            <h3>${esc(s.name)}</h3>
+            <span class="price">${money(s.price)}</span>
+          </div>
+          <div class="duration">${esc(s.duration)} minutos</div>
+          <button type="button" class="btn small ghost" data-pick="${esc(s.id)}">Reservar</button>
+        </article>`).join("");
+    }
+
+    $("serviceSelect").innerHTML = `<option value="">Selecciona un servicio</option>` +
+      services.map(s => `<option value="${esc(s.id)}">${esc(s.name)} · ${money(s.price)} · ${esc(s.duration)} min</option>`).join("");
+
+    /* Estadísticas reales (nada inventado) */
+    if (services.length) {
+      const ds = services.map(s => Number(s.duration));
+      $("heroStats").innerHTML = `
+        <div class="stat"><strong>${services.length}</strong><span>Servicios</span></div>
+        <div class="stat"><strong>${Math.min(...ds)}–${Math.max(...ds)} min</strong><span>Duración</span></div>
+        <div class="stat"><strong>24/7</strong><span>Solicitud de cita en línea</span></div>`;
+    }
+  }
+
+  $("servicesGrid").addEventListener("click", e => {
+    const b = e.target.closest("[data-pick]");
+    if (!b) return;
+    $("serviceSelect").value = b.dataset.pick;
+    $("reservar").scrollIntoView({ behavior: "smooth" });
+    refreshTimes();
+  });
+
+  function renderTeam() {
+    const sec = $("equipo");
+    if (!workers.length || DEMO) { sec.hidden = true; return; }
+    sec.hidden = false;
+    $("teamGrid").innerHTML = workers.map(w => `
+      <div class="team-card">
+        <div class="avatar" aria-hidden="true">${esc((w.nombre || "B").trim().charAt(0).toUpperCase())}</div>
+        <h3 style="font-size:1.15rem">${esc(w.nombre || "Barbero")}</h3>
+        <p class="muted" style="font-size:.85rem">Barbero</p>
+      </div>`).join("");
+    watchReveal();
+  }
+
+  function renderWorkerSelect() {
+    $("workerSelect").innerHTML = `<option value="">Selecciona un barbero</option>` +
+      workers.map(w => `<option value="${esc(w.id)}">${esc(w.nombre || "Barbero")}</option>`).join("");
+  }
+
+  async function loadPublicData() {
+    try { config = await data.config(); } catch (e) { console.error(e); }
+    if (!config.days) config.days = DEFAULT_DAYS;
+    renderHours();
+
+    try { services = await data.services(); } catch (e) { console.error(e); services = []; }
+    try { workers = await data.barbers(); } catch (e) { console.error(e); workers = []; }
+
+    renderPublicServices();
+    renderWorkerSelect();
+    renderTeam();
+    watchReveal();
+  }
+
+  /* =====================================================
+     DISPONIBILIDAD
+  ===================================================== */
+  $("dateSelect").min = todayString();
+  const maxDate = new Date(); maxDate.setDate(maxDate.getDate() + BUSINESS.bookingWindowDays);
+  $("dateSelect").max = toDateStr(maxDate);
+
+  const getService = () => services.find(s => s.id === $("serviceSelect").value);
+  const getDayConfig = date => (config.days || DEFAULT_DAYS)[DAY_KEYS[dateObj(date).getDay()]];
+  const blocksFor = (startMin, duration) => {
+    const out = [];
+    for (let t = startMin; t < startMin + duration; t += STEP) out.push(minToTime(t));
+    return out;
+  };
+
+  async function refreshTimes() {
+    const date = $("dateSelect").value, service = getService(), workerId = $("workerSelect").value;
+    const sel = $("timeSelect");
+    const setMsg = t => { sel.innerHTML = `<option value="">${esc(t)}</option>`; };
+
+    if (!date || !service || !workerId) return setMsg("Selecciona servicio, barbero y fecha");
+    if (date < todayString() || date > $("dateSelect").max) return setMsg("Fecha fuera del rango de reservas");
+    if ((config.blockedDates || []).includes(date)) return setMsg("Fecha no disponible");
+    const dayConfig = getDayConfig(date);
+    if (!dayConfig || !dayConfig.active) return setMsg("Día cerrado");
+
+    setMsg("Cargando…");
+    const token = ++refreshToken;
+    let busy;
+    try { busy = await data.busy(date, workerId); }
+    catch (e) { console.error(e); return setMsg("No se pudo consultar la disponibilidad"); }
+    if (token !== refreshToken) return;
+
+    const start = timeToMin(dayConfig.start), end = timeToMin(dayConfig.end);
+    const now = new Date();
+    const minStart = now.getHours() * 60 + now.getMinutes() + BUSINESS.minLeadMinutes;
+    const duration = Number(service.duration);
+    const options = [];
+
+    for (let t = start; t + duration <= end; t += STEP) {
+      if (date === todayString() && t < minStart) continue;
+      if (blocksFor(t, duration).some(b => busy.has(b))) continue;
+      options.push(`<option value="${minToTime(t)}">${minToTime(t)}</option>`);
+    }
+    sel.innerHTML = options.length
+      ? `<option value="">Selecciona una hora</option>${options.join("")}`
+      : `<option value="">No hay horarios disponibles</option>`;
+  }
+
+  ["serviceSelect", "workerSelect", "dateSelect"].forEach(id => { $(id).onchange = refreshTimes; });
+
+  /* =====================================================
+     RESERVACIÓN
+  ===================================================== */
+  $("bookingForm").onsubmit = async event => {
+    event.preventDefault();
+    const msg = $("bookingMessage");
+    showMsg(msg);
+
+    if ($("website").value) { showMsg(msg, "Solicitud recibida.", "ok"); return; }   // honeypot (bots)
+
+    const name = $("clientName").value.trim().replace(/\s+/g, " ");
+    const phone = $("clientPhone").value.trim();
+    const service = getService();
+    const worker = workers.find(w => w.id === $("workerSelect").value);
+    const date = $("dateSelect").value, time = $("timeSelect").value;
+
+    if (name.length < 2) return showMsg(msg, "Escribe tu nombre completo.", "err");
+    if (!/^[0-9+() -]{8,20}$/.test(phone) || digits(phone).length < 8 || digits(phone).length > 15)
+      return showMsg(msg, "Escribe un teléfono válido (solo números, 8 a 15 dígitos).", "err");
+    if (!service || !worker) return showMsg(msg, "Selecciona servicio y barbero.", "err");
+    if (!date || !time || date < todayString()) return showMsg(msg, "Selecciona una fecha y hora válidas.", "err");
+    if (!$("privacyCheck").checked) return showMsg(msg, "Debes aceptar el Aviso de Privacidad para continuar.", "err");
+
+    try {
+      if (Date.now() - Number(localStorage.getItem("bc_last") || 0) < 30000)
+        return showMsg(msg, "Espera unos segundos antes de enviar otra solicitud.", "err");
+    } catch (_) { /* almacenamiento no disponible: se ignora */ }
+
+    const btn = $("bookingSubmit");
+    btn.disabled = true; btn.textContent = "Enviando…";
+
+    try {
+      const times = blocksFor(timeToMin(time), Number(service.duration));
+      const id = await data.createBooking({
+        name, phone,
+        serviceId: service.id, service: service.name,
+        date, time,
+        duration: Number(service.duration), price: Number(service.price),
+        workerId: worker.id, status: "pending",
+        privacyAccepted: true, privacyVersion: BUSINESS.privacyVersion
+      }, times);
+
+      try { localStorage.setItem("bc_last", String(Date.now())); } catch (_) { }
+
+      const code = id.slice(0, 6).toUpperCase();
+      const wa = digits(BUSINESS.whatsapp);
+      const waText = encodeURIComponent(`Hola, acabo de solicitar una cita en ${BUSINESS.name}. Código ${code}: ${service.name} el ${prettyDate(date)} a las ${time}. A nombre de ${name}.`);
+      showMsg(msg,
+        `Solicitud recibida. Código ${code}: ${prettyDate(date)} a las ${time} con ${worker.nombre || "tu barbero"}. Tu cita queda pendiente hasta que el negocio la confirme.`,
+        "ok",
+        wa ? `<br><a href="https://wa.me/${wa}?text=${waText}" target="_blank" rel="noopener noreferrer">Enviar aviso por WhatsApp</a>` : "");
+
+      $("bookingForm").reset();
+      $("dateSelect").min = todayString();
+      $("timeSelect").innerHTML = `<option value="">Selecciona servicio, barbero y fecha</option>`;
+      msg.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) {
+      console.error(error);
+      if (error && error.code === "permission-denied") {
+        showMsg(msg, "Ese horario acaba de ser ocupado por otra persona. Elige otro horario.", "err");
+        refreshTimes();
+      } else {
+        showMsg(msg, "No pudimos registrar tu cita. Intenta de nuevo o contáctanos directamente.", "err");
+      }
+    } finally {
+      btn.disabled = false; btn.textContent = "Solicitar cita";
+    }
+  };
+
+  /* =====================================================
+     LOGIN (modal accesible)
+  ===================================================== */
+  function openLogin() {
+    lastFocus = document.activeElement;
+    $("loginModal").classList.add("show");
+    document.body.classList.add("modal-open");
+    $("loginEmail").focus();
+  }
+  function closeLogin() {
+    $("loginModal").classList.remove("show");
+    document.body.classList.remove("modal-open");
+    if (lastFocus) lastFocus.focus();
+  }
+  $("loginBtn").onclick = openLogin;
+  $("closeLogin").onclick = closeLogin;
+  $("loginModal").onclick = e => { if (e.target === $("loginModal")) closeLogin(); };
+  document.addEventListener("keydown", e => {
+    if (!$("loginModal").classList.contains("show")) return;
+    if (e.key === "Escape") return closeLogin();
+    if (e.key === "Tab") {
+      const f = [...$("loginModal").querySelectorAll("button, input")].filter(x => !x.disabled);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  $("loginForm").onsubmit = async event => {
+    event.preventDefault();
+    showMsg($("loginMessage"));
+    if (DEMO) return showMsg($("loginMessage"), "Modo demostración: conecta Firebase para habilitar el acceso del equipo.", "err");
+
+    $("loginSubmit").disabled = true;
+    try {
+      await signInWithEmailAndPassword(auth, $("loginEmail").value.trim(), $("loginPassword").value);
+      $("loginPassword").value = "";
+      closeLogin();
+    } catch (error) {
+      console.error("Firebase Auth:", error.code, error.message);
+      showMsg($("loginMessage"), `No se pudo ingresar: ${error.code || "error desconocido"}`, "err");
+    } finally { $("loginSubmit").disabled = false; }
+  };
+
+  $("resetPass").onclick = async () => {
+    const email = $("loginEmail").value.trim();
+    if (DEMO) return showMsg($("loginMessage"), "Modo demostración.", "err");
+    if (!email) return showMsg($("loginMessage"), "Escribe tu correo arriba y vuelve a pulsar esta opción.", "err");
+    try { await sendPasswordResetEmail(auth, email); } catch (_) { /* no revelar si existe */ }
+    showMsg($("loginMessage"), "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.", "ok");
+  };
+
+  /* =====================================================
+     PANEL PRIVADO
+  ===================================================== */
+  const isOwner = () => currentProfile && currentProfile.rol === "owner";
+
+  async function loadPrivate() {
+    if (!currentUser) return;
+    let profile = null;
+    try {
+      const snap = await getDoc(doc(db, "usuarios", currentUser.uid));
+      if (snap.exists()) profile = { id: snap.id, ...snap.data() };
+    } catch (e) { console.error(e); }
+
+    if (!profile || !["owner", "barbero"].includes(profile.rol) || profile.activo !== true) {
+      const uid = currentUser.uid;
+      await signOut(auth);
+      openLogin();
+      showMsg($("loginMessage"), `Tu cuenta no tiene acceso autorizado al panel. UID: ${uid}`, "err");
+      console.warn("BLACK CROWN - UID sin acceso:", uid, "perfil encontrado:", profile);
+      return;
+    }
+    currentProfile = profile;
+
+    document.body.classList.add("is-admin");
+    $("adminApp").classList.add("show");
+    $("roleLabel").textContent = isOwner() ? "Propietario" : "Barbero";
+    $("userEmailLabel").textContent = currentUser.email || "";
+    document.querySelectorAll("[data-owner-only]").forEach(el => { el.style.display = isOwner() ? "block" : "none"; });
+    document.querySelectorAll("[data-owner-panel]").forEach(el => { el.dataset.allowed = isOwner() ? "1" : "0"; });
+
+    await loadPrivateData();
+    showPanel("dashboard");
+    window.scrollTo(0, 0);
+  }
+
+  async function loadPrivateData() {
+    try {
+      const ref = isOwner()
+        ? collection(db, "citas")
+        : query(collection(db, "citas"), where("workerId", "==", currentUser.uid));
+      const snap = await getDocs(ref);
+      appointments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) { console.error(e); appointments = []; toast("No se pudieron cargar las citas."); }
+
+    try {
+      const snap = await getDocs(isOwner() ? collection(db, "barberos") : query(collection(db, "barberos"), where("activo", "==", true)));
+      workers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) { workers = []; }
+
+    if (isOwner()) {
+      try {
+        const snap = await getDocs(collection(db, "servicios"));
+        services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (e) { console.error(e); }
+      try { config = await data.config(); if (!config.days) config.days = DEFAULT_DAYS; } catch (e) { }
+      renderWorkers(); renderServices(); renderSchedule();
+    }
+    renderDashboard();
+    renderAppointments();
+  }
+
+  const workerName = id => (workers.find(w => w.id === id) || {}).nombre || "Barbero";
+  const STATUS_LABEL = { pending: "Pendiente", confirmed: "Confirmada", completed: "Completada", cancelled: "Cancelada" };
+  const badge = s => `<span class="badge ${esc(s)}">${esc(STATUS_LABEL[s] || s)}</span>`;
+
+  function nowKey() { const n = new Date(); return `${toDateStr(n)}${pad(n.getHours())}:${pad(n.getMinutes())}`; }
+
+  function renderDashboard() {
+    const active = appointments.filter(a => a.status !== "cancelled");
+    const completed = appointments.filter(a => a.status === "completed");
+    $("mTotal").textContent = active.length;
+    $("mPending").textContent = appointments.filter(a => a.status === "pending").length;
+    $("mDone").textContent = completed.length;
+    $("mIncome").textContent = money(completed.reduce((t, a) => t + Number(a.price || 0), 0));
+
+    const upcoming = appointments
+      .filter(a => a.status !== "cancelled" && a.status !== "completed" && `${a.date}${a.time}` >= nowKey())
+      .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))
+      .slice(0, 8);
+
+    if (!upcoming.length) { $("dashboardUpcoming").innerHTML = `<div class="empty">No hay próximas citas.</div>`; return; }
+
+    $("dashboardUpcoming").innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>Cliente</th><th>Fecha</th><th>Hora</th><th>Servicio</th><th>Estado</th></tr></thead>
+        <tbody>${upcoming.map(a => `
+          <tr><td>${esc(a.name)}</td><td>${esc(a.date)}</td><td>${esc(a.time)}</td><td>${esc(a.service)}</td><td>${badge(a.status)}</td></tr>`).join("")}
+        </tbody></table></div>`;
+  }
+
+  function renderAppointments() {
+    const search = ($("appointmentSearch").value || "").toLowerCase();
+    const status = $("statusFilter").value || "";
+    const list = appointments
+      .filter(a => (!search || `${a.name} ${a.phone}`.toLowerCase().includes(search)) && (!status || a.status === status))
+      .sort((a, b) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`));
+
+    if (!list.length) { $("appointmentsBody").innerHTML = `<tr><td colspan="8" class="empty">No hay citas.</td></tr>`; return; }
+
+    $("appointmentsBody").innerHTML = list.map(a => {
+      const open = a.status === "pending" || a.status === "confirmed";
+      return `
+      <tr>
+        <td><b>${esc(a.name)}</b><br><small class="muted">${esc(a.phone)}</small></td>
+        <td>${esc(a.service)}</td>
+        <td>${esc(workerName(a.workerId))}</td>
+        <td>${esc(a.date)}</td>
+        <td>${esc(a.time)}</td>
+        <td>${money(a.price)}</td>
+        <td>${badge(a.status)}</td>
+        <td><div class="row-actions">
+          ${a.status === "pending" ? `<button class="btn small" data-act="confirmed" data-id="${esc(a.id)}">Confirmar</button>` : ""}
+          ${open ? `<button class="btn small ghost" data-act="completed" data-id="${esc(a.id)}">Completar</button>` : ""}
+          ${open ? `<button class="btn small danger" data-act="cancelled" data-id="${esc(a.id)}">Cancelar</button>` : ""}
+          ${isOwner() ? `<button class="btn small danger" data-act="delete" data-id="${esc(a.id)}" title="Elimina los datos personales de esta cita">Eliminar</button>` : ""}
+        </div></td>
+      </tr>`;
+    }).join("");
+  }
+
+  $("appointmentsBody").addEventListener("click", e => {
+    const b = e.target.closest("[data-act]");
+    if (!b) return;
+    b.dataset.act === "delete" ? deleteAppointment(b.dataset.id) : setStatus(b.dataset.id, b.dataset.act);
+  });
+
+  async function setStatus(id, status) {
+    const a = appointments.find(x => x.id === id);
+    if (!a) return;
+    if (status === "cancelled" && !confirm("¿Cancelar esta cita? Se liberará el horario.")) return;
+    try {
+      const batch = writeBatch(db);
+      batch.update(doc(db, "citas", id), { status, updatedAt: serverTimestamp() });
+      if (status === "cancelled") (a.slotIds || []).forEach(s => batch.delete(doc(db, "ocupados", s)));
+      await batch.commit();
+      await loadPrivateData();
+      toast("Cita actualizada.");
+    } catch (e) { console.error(e); toast("No se pudo actualizar la cita."); }
+  }
+
+  async function deleteAppointment(id) {
+    const a = appointments.find(x => x.id === id);
+    if (!a) return;
+    if (!confirm("¿Eliminar definitivamente esta cita y los datos personales del cliente? No se puede deshacer.")) return;
+    try {
+      const batch = writeBatch(db);
+      batch.delete(doc(db, "citas", id));
+      (a.slotIds || []).forEach(s => batch.delete(doc(db, "ocupados", s)));
+      await batch.commit();
+      await loadPrivateData();
+      toast("Cita eliminada.");
+    } catch (e) { console.error(e); toast("No se pudo eliminar la cita."); }
+  }
+
+  $("appointmentSearch").oninput = renderAppointments;
+  $("statusFilter").onchange = renderAppointments;
+
+  /* ---------- Barberos ---------- */
+  function renderWorkers() {
+    if (!workers.length) { $("workersList").innerHTML = `<div class="empty" style="grid-column:1/-1">No hay barberos registrados. Agrega el primero arriba.</div>`; return; }
+    $("workersList").innerHTML = workers.map(w => `
+      <div class="admin-card">
+        <h3>${esc(w.nombre || "Barbero")}</h3>
+        <p class="muted" style="font-size:.75rem;word-break:break-all">${esc(w.id)}</p>
+        <p style="margin:10px 0">${w.activo ? `<span class="badge completed">Activo</span>` : `<span class="badge cancelled">Inactivo</span>`}</p>
+        <div class="row-actions">
+          <button class="btn small ghost" data-w-toggle="${esc(w.id)}">${w.activo ? "Desactivar" : "Activar"}</button>
+        </div>
+      </div>`).join("");
+  }
+
+  $("workersList").addEventListener("click", async e => {
+    const b = e.target.closest("[data-w-toggle]");
+    if (!b) return;
+    const w = workers.find(x => x.id === b.dataset.wToggle);
+    if (!w) return;
+    try {
+      await setDoc(doc(db, "barberos", w.id), { nombre: w.nombre, activo: !w.activo });
+      await loadPrivateData();
+    } catch (err) { console.error(err); toast("No se pudo actualizar al barbero."); }
+  });
+
+  $("workerForm").onsubmit = async e => {
+    e.preventDefault();
+    const nombre = $("workerName").value.trim();
+    const uid = $("workerUid").value.trim();
+    if (nombre.length < 2) return;
+    try {
+      if (uid) await setDoc(doc(db, "barberos", uid), { nombre, activo: true });
+      else await addDoc(collection(db, "barberos"), { nombre, activo: true });
+      $("workerForm").reset();
+      await loadPrivateData();
+      toast("Barbero agregado.");
+    } catch (err) { console.error(err); toast("No se pudo agregar al barbero."); }
+  };
+
+  /* ---------- Servicios (admin) ---------- */
+  function renderServices() {
+    if (!services.length) { $("servicesBody").innerHTML = `<tr><td colspan="5" class="empty">No hay servicios. Agrega uno o carga los de ejemplo.</td></tr>`; return; }
+    $("servicesBody").innerHTML = services.map(s => `
+      <tr>
+        <td>${esc(s.name)}</td><td>${money(s.price)}</td><td>${esc(s.duration)} min</td><td>${s.active !== false ? "Sí" : "No"}</td>
+        <td><div class="row-actions">
+          <button class="btn small ghost" data-s-edit="${esc(s.id)}">Editar</button>
+          <button class="btn small danger" data-s-del="${esc(s.id)}">Eliminar</button>
+        </div></td>
+      </tr>`).join("");
+  }
+
+  $("servicesBody").addEventListener("click", async e => {
+    const ed = e.target.closest("[data-s-edit]");
+    const del = e.target.closest("[data-s-del]");
+    if (ed) {
+      const s = services.find(x => x.id === ed.dataset.sEdit);
+      if (!s) return;
+      $("serviceId").value = s.id; $("serviceName").value = s.name; $("servicePrice").value = s.price;
+      $("serviceDuration").value = s.duration; $("serviceActive").value = String(s.active !== false);
+      $("serviceName").focus();
+    }
+    if (del) {
+      if (!confirm("¿Eliminar este servicio?")) return;
+      try {
+        const batch = writeBatch(db);
+        batch.delete(doc(db, "servicios", del.dataset.sDel));
+        await batch.commit();
+        await loadPrivateData();
+      } catch (err) { console.error(err); toast("No se pudo eliminar el servicio."); }
+    }
+  });
+
+  $("clearService").onclick = () => { $("serviceForm").reset(); $("serviceId").value = ""; };
+
+  $("serviceForm").onsubmit = async e => {
+    e.preventDefault();
+    const id = $("serviceId").value;
+    const payload = {
+      name: $("serviceName").value.trim(),
+      price: Number($("servicePrice").value),
+      duration: Number($("serviceDuration").value),
+      active: $("serviceActive").value === "true"
+    };
+    try {
+      if (id) await setDoc(doc(db, "servicios", id), payload);
+      else await addDoc(collection(db, "servicios"), payload);
+      $("serviceForm").reset(); $("serviceId").value = "";
+      await loadPrivateData();
+      toast("Servicio guardado.");
+    } catch (err) { console.error(err); toast("No se pudo guardar el servicio."); }
+  };
+
+  $("seedServices").onclick = async () => {
+    if (services.length && !confirm("Ya tienes servicios. ¿Agregar también los de ejemplo?")) return;
+    try {
+      for (const s of DEFAULT_SERVICES) await addDoc(collection(db, "servicios"), s);
+      await loadPrivateData();
+      toast("Servicios de ejemplo cargados.");
+    } catch (err) { console.error(err); toast("No se pudieron cargar los servicios."); }
+  };
+
+  /* ---------- Horarios ---------- */
+  function renderSchedule() {
+    const days = config.days || DEFAULT_DAYS;
+    $("scheduleGrid").innerHTML = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"].map(day => {
+      const v = days[day] || DEFAULT_DAYS[day];
+      return `
+      <div class="admin-card sch-row">
+        <strong>${DAY_LABEL[day]}</strong>
+        <label style="margin:0"><input type="checkbox" style="width:auto" data-day="${day}" data-key="active" ${v.active ? "checked" : ""}> Abierto</label>
+        <input type="time" aria-label="Apertura ${DAY_LABEL[day]}" data-day="${day}" data-key="start" value="${esc(v.start)}">
+        <input type="time" aria-label="Cierre ${DAY_LABEL[day]}" data-day="${day}" data-key="end" value="${esc(v.end)}">
+      </div>`;
+    }).join("");
+    renderBlocked();
+  }
+
+  function renderBlocked() {
+    const list = [...(config.blockedDates || [])].sort();
+    $("blockedChips").innerHTML = list.length
+      ? list.map(d => `<span class="chip">${esc(d)}<button type="button" data-unblock="${esc(d)}" aria-label="Quitar ${esc(d)}">×</button></span>`).join("")
+      : `<span class="muted" style="font-size:.85rem">Sin fechas bloqueadas.</span>`;
+  }
+
+  $("addBlock").onclick = () => {
+    const d = $("blockDate").value;
+    if (!d) return;
+    config.blockedDates = [...new Set([...(config.blockedDates || []), d])];
+    $("blockDate").value = "";
+    renderBlocked();
+  };
+  $("blockedChips").addEventListener("click", e => {
+    const b = e.target.closest("[data-unblock]");
+    if (!b) return;
+    config.blockedDates = (config.blockedDates || []).filter(d => d !== b.dataset.unblock);
+    renderBlocked();
+  });
+
+  $("saveSchedule").onclick = async () => {
+    const days = {};
+    let invalid = false;
+    document.querySelectorAll("[data-day]").forEach(el => {
+      const d = el.dataset.day;
+      days[d] = days[d] || { ...DEFAULT_DAYS[d] };
+      days[d][el.dataset.key] = el.type === "checkbox" ? el.checked : el.value;
+    });
+    Object.values(days).forEach(v => { if (v.active && (!v.start || !v.end || v.start >= v.end)) invalid = true; });
+    if (invalid) return toast("Revisa los horarios: la apertura debe ser antes del cierre.");
+    try {
+      await setDoc(doc(db, "configuracion", "general"), { days, blockedDates: config.blockedDates || [] });
+      config.days = days;
+      toast("Horarios guardados.");
+    } catch (e) { console.error(e); toast("No se pudieron guardar los horarios."); }
+  };
+
+  /* ---------- Navegación del panel ---------- */
+  const TITLES = { dashboard: "Dashboard", appointments: "Citas", workers: "Barberos", services: "Servicios", schedule: "Horarios" };
+  function showPanel(name) {
+    const panel = $("panel-" + name);
+    if (panel && panel.hasAttribute("data-owner-panel") && !isOwner()) name = "dashboard";
+    document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("active"));
+    $("panel-" + name).classList.add("active");
+    document.querySelectorAll(".side-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === name));
+    $("panelTitle").textContent = TITLES[name] || "Panel";
+  }
+  document.querySelectorAll(".side-btn").forEach(b => { b.onclick = () => showPanel(b.dataset.panel); });
+
+  $("logoutBtn").onclick = () => { if (auth) signOut(auth); };
+
+  if (!DEMO) {
+    onAuthStateChanged(auth, async user => {
+      currentUser = user;
+      if (user) {
+        await loadPrivate();
+      } else if (currentProfile) {
+        currentProfile = null;
+        appointments = [];
+        $("adminApp").classList.remove("show");
+        document.body.classList.remove("is-admin");
+        loadPublicData();      // vuelve a cargar solo datos públicos
+      }
+    });
+  }
+
+  /* ---------- Inicio ---------- */
+  applyBusiness();
+  loadPublicData();
+</script>
+
+</body>
+</html>
