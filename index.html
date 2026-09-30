@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Barbería</title>
+<meta name="description" id="metaDesc" content="Reserva tu cita en línea.">
+<meta name="theme-color" content="#000000">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<style>
+  :root {
+    --gold: #f2b544; --gold-soft: #ffe29a; --gold-deep: #d98a1f; --accent-rgb: 242,181,68;
+    --pole-a: #d62839; --pole-b: #2563eb; --pole-a-rgb: 214,40,57; --pole-b-rgb: 37,99,235;
+  }
+  html { scroll-behavior: smooth; scroll-padding-top: 12px; }
+  html, body { min-height: 100%; }
+  body { background: #000; color: #fff; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; margin: 0; line-height: 1.5; }
+  .serif { font-family: 'Instrument Serif', serif; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .text-gold { color: var(--gold); }
+  .gold-text { background: linear-gradient(135deg, var(--gold-soft) 0%, var(--gold) 45%, var(--gold-deep) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .btn-gold { background: linear-gradient(135deg, var(--gold-soft) 0%, var(--gold) 55%, var(--gold-deep) 100%); color: #111; font-weight: 600; box-shadow: 0 8px 28px rgba(var(--accent-rgb), .28); transition: transform .2s ease, box-shadow .2s ease, filter .2s ease; cursor: pointer; border: 0; display: inline-block; text-align: center; }
+  .btn-gold:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 12px 34px rgba(var(--accent-rgb), .4); }
+  .btn-gold:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+  .pole { height: 6px; width: 100%; opacity: .9; background: repeating-linear-gradient(45deg, var(--pole-a) 0 14px, #fff 14px 28px, var(--pole-b) 28px 42px, #fff 42px 56px); }
+  .glow-a { background: radial-gradient(ellipse at 85% 10%, rgba(var(--accent-rgb), .13), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(var(--pole-a-rgb), .10), transparent 50%), #000 !important; }
+  .glow-b { background: radial-gradient(ellipse at 10% 15%, rgba(var(--accent-rgb), .12), transparent 55%), radial-gradient(ellipse at 90% 90%, rgba(var(--pole-b-rgb), .10), transparent 50%), #000 !important; }
+
+  /* liquid glass */
+  .liquid-glass { background: rgba(var(--accent-rgb), 0.045); background-blend-mode: luminosity; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: none; box-shadow: inset 0 1px 1px rgba(255,255,255,.1); position: relative; overflow: hidden; }
+  .liquid-glass::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.4px; background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,.15) 80%, rgba(255,255,255,.45) 100%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+
+  .hero-title { letter-spacing: -0.02em; line-height: 1.05; }
+  summary { list-style: none; } summary::-webkit-details-marker { display: none; }
+
+  /* tipografía de secciones (compacta y profesional) */
+  .eyebrow { color: var(--gold); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+  .sec-title { font-family: 'Instrument Serif', serif; color: #fff; letter-spacing: -0.015em; line-height: 1.1; font-size: clamp(1.9rem, 4.6vw, 3rem); margin-top: .5rem; }
+  .sec-head { margin-bottom: 1.75rem; max-width: 40rem; }
+  .sec { padding: 3.5rem 1.25rem; overflow: hidden; }
+  @media (min-width: 768px) { .sec { padding: 5rem 1.5rem; } .sec-head { margin-bottom: 2.5rem; } }
+  .wrap { max-width: 72rem; margin: 0 auto; }
+  .body-text { color: rgba(255,255,255,.66); font-size: .95rem; line-height: 1.65; }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal-stagger.visible > * { opacity: 1; transform: none; }
+  .reveal-stagger.visible > *:nth-child(2) { transition-delay: .07s; } .reveal-stagger.visible > *:nth-child(3) { transition-delay: .14s; }
+  .reveal-stagger.visible > *:nth-child(4) { transition-delay: .21s; } .reveal-stagger.visible > *:nth-child(5) { transition-delay: .28s; }
+  .reveal-stagger.visible > *:nth-child(6) { transition-delay: .35s; } .reveal-stagger.visible > *:nth-child(n+7) { transition-delay: .42s; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; } }
+
+  .bc-input { width: 100%; padding: 11px 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; color: #fff; outline: none; font-size: .9rem; color-scheme: dark; }
+  .bc-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .18); }
+  .bc-input option { color: #000; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  ::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), .45); border-radius: 10px; }
+
+  #waFab { position: fixed; right: 16px; bottom: 16px; z-index: 60; width: 54px; height: 54px; border-radius: 999px; display: none; align-items: center; justify-content: center; background: #25d366; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  #waFab.show { display: flex; }
+
+  /* ===== PANEL DEL EQUIPO ===== */
+  body.is-admin > *:not(#adminApp):not(#toast):not(#loginModal):not(#waModal):not(script):not(style) { display: none !important; }
+  .modal { display: none; position: fixed; inset: 0; z-index: 800; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 20px; }
+  .modal.show { display: flex; }
+  .modal-box { position: relative; width: 100%; max-width: 440px; background: #0d0a06; border: 1px solid rgba(var(--accent-rgb), .25); border-radius: 24px; padding: 30px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .modal-box .close { position: absolute; top: 12px; right: 16px; background: none; border: 0; color: #fff; font-size: 1.6rem; cursor: pointer; opacity: .7; }
+  #adminApp { display: none; min-height: 100vh; background: radial-gradient(ellipse at 90% 0%, rgba(var(--accent-rgb), .10), transparent 50%), #070604; }
+  #adminApp.show { display: block; }
+  .adm-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+  .adm-side { border-right: 1px solid rgba(255,255,255,.08); padding: 24px 18px; background: rgba(var(--accent-rgb), .03); }
+  .adm-side nav { display: grid; gap: 6px; margin-top: 24px; }
+  .side-btn { text-align: left; background: none; border: 0; color: rgba(255,255,255,.65); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: .92rem; }
+  .side-btn:hover { background: rgba(255,255,255,.05); color: #fff; }
+  .side-btn.active { background: rgba(var(--accent-rgb), .14); color: var(--gold-soft); }
+  .adm-main { padding: 28px; width: 100%; max-width: 1500px; }
+  .adm-panel { display: none; } .adm-panel.active { display: block; }
+  .adm-card { background: rgba(var(--accent-rgb), .04); border: 1px solid rgba(255,255,255,.09); border-radius: 18px; padding: 20px; }
+  .adm-card h3 { font-size: 1.1rem; margin: 0 0 4px; color: var(--gold-soft); }
+  .adm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .metric { background: rgba(var(--accent-rgb), .05); border: 1px solid rgba(var(--accent-rgb), .18); border-radius: 16px; padding: 16px; }
+  .metric span { display: block; font-size: .78rem; color: rgba(255,255,255,.55); }
+  .metric strong { display: block; font-size: 1.7rem; margin-top: 4px; }
+  .adm-muted { color: rgba(255,255,255,.5); font-size: .85rem; }
+  .table-wrap { overflow-x: auto; margin-top: 14px; }
+  table.adm-table { width: 100%; border-collapse: collapse; font-size: .88rem; min-width: 640px; }
+  table.adm-table th { text-align: left; color: rgba(255,255,255,.5); font-weight: 500; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  table.adm-table td { padding: 11px 12px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: middle; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .74rem; font-weight: 600; }
+  .badge.pending { background: rgba(var(--accent-rgb), .16); color: #ffd98a; } .badge.confirmed { background: rgba(37,99,235,.2); color: #9ec1ff; }
+  .badge.completed { background: rgba(34,197,94,.16); color: #86efac; } .badge.cancelled { background: rgba(214,40,57,.2); color: #ff9aa5; }
+  .abtn { border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.04); color: #fff; border-radius: 999px; padding: 6px 14px; font-size: .78rem; cursor: pointer; text-decoration: none; display: inline-block; }
+  .abtn:hover { background: rgba(255,255,255,.1); }
+  .abtn.gold { background: linear-gradient(135deg, var(--gold-soft), var(--gold) 55%, var(--gold-deep)); color: #111; border: 0; font-weight: 600; }
+  .abtn.wa { background: #25d366; border: 0; color: #06331a; font-weight: 600; }
+  .abtn.danger { border-color: rgba(214,40,57,.5); color: #ff9aa5; }
+  .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .form-grid .full { grid-column: 1 / -1; }
+  .form-grid label { display: block; font-size: .78rem; color: rgba(255,255,255,.6); margin-bottom: 6px; }
+  .barber-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .sch-row { display: grid; grid-template-columns: 110px 100px 1fr 1fr; gap: 12px; align-items: center; padding: 10px 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(var(--accent-rgb), .12); border-radius: 999px; padding: 4px 6px 4px 12px; font-size: .82rem; }
+  .chip button { background: none; border: 0; color: #fff; cursor: pointer; font-size: 1rem; }
+  .empty { text-align: center; color: rgba(255,255,255,.45); padding: 24px 10px; }
+  .warn-bar { background: rgba(253,224,71,.12); border: 1px solid rgba(253,224,71,.4); color: #fde68a; border-radius: 12px; padding: 12px 16px; font-size: .85rem; margin-bottom: 18px; }
+  @media (max-width: 900px) {
+    .adm-shell { grid-template-columns: 1fr; }
+    .adm-side { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .adm-side nav { grid-auto-flow: column; overflow-x: auto; margin-top: 12px; }
+    .adm-main { padding: 16px; }
+    .adm-grid, .barber-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .sch-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px;text-align:center">Este sitio necesita JavaScript para funcionar.</p></noscript>
+
+<!-- ============ HERO + NAVBAR ============ -->
+<header class="min-h-screen overflow-hidden relative flex flex-col" id="inicio">
+  <video id="heroVideo" class="absolute inset-0 w-full h-full object-cover object-center" style="opacity:0" muted autoplay playsinline preload="auto"></video>
+  <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.6) 100%)"></div>
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 55%, rgba(var(--accent-rgb), .16), transparent 60%)"></div>
+
+  <nav class="relative z-20 px-4 sm:px-6 py-5" aria-label="Principal">
+    <div class="liquid-glass rounded-full max-w-5xl mx-auto px-5 py-2.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2 min-w-0">
+        <a href="#inicio" class="flex items-center gap-2 min-w-0" aria-label="Inicio">
+          <span id="brandMark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gold"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7Z"/><path d="M5 20h14"/></svg></span>
+          <span class="text-white font-semibold text-base sm:text-lg truncate" data-cfg="name"></span>
+        </a>
+        <div class="hidden md:flex items-center gap-7 ml-7">
+          <a href="#servicios" class="text-white/80 hover:text-white text-sm font-medium">Servicios</a>
+          <a href="#galeria" class="text-white/80 hover:text-white text-sm font-medium">Galería</a>
+          <a href="#nosotros" class="text-white/80 hover:text-white text-sm font-medium">Nosotros</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 shrink-0">
+        <a href="#preguntas" class="text-white text-sm font-medium hidden lg:inline">Preguntas</a>
+        <button id="loginBtn" type="button" class="text-white/50 hover:text-gold text-xs hidden sm:inline">Equipo</button>
+        <a href="#reservar" class="btn-gold rounded-full px-5 py-2 text-sm">Reservar</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="relative z-10 flex-1 flex flex-col items-center justify-center px-5 pb-8 pt-2 text-center">
+    <h1 class="hero-title serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white" data-rich="copy.heroTitle"></h1>
+
+    <form id="heroForm" class="max-w-md w-full mt-8">
+      <div class="liquid-glass rounded-full pl-5 pr-1.5 py-1.5 flex items-center gap-3">
+        <input id="heroPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ingresa tu teléfono" aria-label="Tu teléfono" class="bg-transparent flex-1 min-w-0 outline-none text-white placeholder:text-white/45 text-sm">
+        <button type="submit" aria-label="Ir a reservar" class="btn-gold rounded-full p-2.5 shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <p class="text-white/90 text-sm leading-relaxed mt-5 max-w-md" data-text="copy.heroSubtitle"></p>
+    <a href="#nosotros" class="liquid-glass rounded-full px-7 py-2.5 text-sm font-medium hover:bg-white/5 transition-colors mt-6" style="color:var(--gold-soft)" data-text="copy.heroButton"></a>
+  </div>
+
+  <div class="relative z-10 flex justify-center gap-3 pb-8" id="heroSocials"></div>
+</header>
+
+<main id="contenido">
+<!-- ============ NOSOTROS ============ -->
+<section id="nosotros" class="sec bg-black relative" style="padding-top:4.5rem">
+  <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse at top, rgba(var(--accent-rgb), .14) 0%, transparent 70%)"></div>
+  <div class="wrap relative">
+    <p class="reveal eyebrow" data-text="copy.aboutLabel"></p>
+    <h2 class="reveal serif text-white mt-3" style="font-size:clamp(2rem,5vw,3.6rem);line-height:1.1;letter-spacing:-0.015em;max-width:52rem" data-rich="copy.aboutTitle"></h2>
+    <div id="aboutFeatures" class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8"></div>
+  </div>
+</section>
+
+<!-- ============ VIDEO DESTACADO ============ -->
+<section class="bg-black px-5 md:px-6 pb-14 md:pb-20 overflow-hidden">
+  <div class="reveal wrap rounded-3xl overflow-hidden border border-white/10 bg-black">
+    <div class="relative">
+      <video class="w-full aspect-[4/3] sm:aspect-video object-cover block" muted autoplay loop playsinline preload="auto" data-src="media.featuredVideo"></video>
+      <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top, rgba(0,0,0,.55), transparent 60%)"></div>
+      <div class="hidden md:flex absolute bottom-0 left-0 right-0 p-8 items-end justify-between gap-6">
+        <div class="liquid-glass rounded-2xl p-6 max-w-md">
+          <p class="eyebrow mb-2" data-text="copy.approachLabel"></p>
+          <p class="text-white text-[15px] leading-relaxed" data-text="copy.approachText"></p>
+        </div>
+        <a href="#menu" class="btn-gold rounded-full px-7 py-2.5 text-sm shrink-0" data-text="copy.approachButton"></a>
+      </div>
+    </div>
+    <div class="md:hidden p-5 bg-black">
+      <p class="eyebrow mb-2" data-text="copy.approachLabel"></p>
+      <p class="text-white/85 text-sm leading-relaxed" data-text="copy.approachText"></p>
+      <a href="#menu" class="btn-gold rounded-full px-6 py-2.5 text-sm mt-4" data-text="copy.approachButton"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FILOSOFÍA ============ -->
+<section class="sec bg-black">
+  <div class="wrap">
+    <h2 class="reveal serif text-white mb-8 md:mb-12" style="font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;letter-spacing:-0.02em" data-rich="copy.philosophyTitle"></h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
+      <div class="reveal rounded-3xl overflow-hidden aspect-[4/3]">
+        <video class="w-full h-full object-cover" muted autoplay loop playsinline preload="auto" data-src="media.philosophyVideo"></video>
+      </div>
+      <div id="philoBlocks" class="reveal flex flex-col gap-6"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUÉ HACEMOS ============ -->
+<section id="servicios" class="sec bg-black relative">
+  <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse at center, rgba(var(--accent-rgb), .10) 0%, transparent 60%)"></div>
+  <div class="wrap relative">
+    <div class="reveal flex items-end justify-between gap-4 sec-head" style="max-width:none">
+      <h2 class="sec-title gold-text" style="margin-top:0" data-text="copy.servicesTitle"></h2>
+      <span class="eyebrow hidden md:inline" data-text="copy.servicesLabel"></span>
+    </div>
+    <div id="serviceCards" class="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"></div>
+  </div>
+</section>
+
+<!-- ============ MENÚ ============ -->
+<section id="menu" class="sec bg-black glow-b">
+  <div class="wrap">
+    <div class="reveal sec-head">
+      <p class="eyebrow" data-text="copy.menuLabel"></p>
+      <h2 class="sec-title" data-text="copy.menuTitle"></h2>
+    </div>
+    <div id="pricingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"><p class="text-white/40 text-sm">Cargando servicios…</p></div>
+    <p class="text-white/45 text-xs mt-5" id="priceNoteText"></p>
+  </div>
+</section>
+
+<!-- ============ EQUIPO ============ -->
+<section id="equipo" class="sec bg-black" style="display:none">
+  <div class="wrap">
+    <div class="reveal sec-head"><p class="eyebrow" data-text="copy.teamLabel"></p><h2 class="sec-title" data-text="copy.teamTitle"></h2></div>
+    <div id="teamGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+  </div>
+</section>
+
+<!-- ============ GALERÍA ============ -->
+<section id="galeria" class="sec bg-black glow-a">
+  <div class="wrap">
+    <div class="reveal sec-head"><p class="eyebrow" data-text="copy.galleryLabel"></p><h2 class="sec-title" data-text="copy.galleryTitle"></h2></div>
+    <div id="galleryGrid" class="reveal-stagger grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+  </div>
+</section>
+
+<div class="pole" id="poleA"></div>
+
+<!-- ============ RESERVA ============ -->
+<section id="reservar" class="sec bg-black glow-a">
+  <div class="wrap grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-8 lg:gap-12 items-start">
+    <div class="reveal lg:sticky lg:top-24">
+      <p class="eyebrow" data-text="copy.bookingLabel"></p>
+      <h2 class="sec-title" data-rich="copy.bookingTitle"></h2>
+      <p class="body-text mt-3 max-w-sm" data-text="copy.bookingText"></p>
+      <ol class="mt-5 space-y-3 text-sm text-white/65" id="bookingSteps"></ol>
+    </div>
+
+    <form id="bookingForm" class="reveal liquid-glass rounded-3xl p-5 md:p-7" novalidate>
+      <div id="demoBanner"></div>
+      <div id="bookingMessage" role="status" aria-live="polite"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div><label class="block text-white/65 text-xs mb-1.5" for="clientName">Nombre</label>
+          <input id="clientName" maxlength="80" minlength="2" required autocomplete="name" placeholder="Tu nombre" class="bc-input"></div>
+        <div><label class="block text-white/65 text-xs mb-1.5" for="clientPhone">Teléfono (WhatsApp)</label>
+          <input id="clientPhone" maxlength="20" required inputmode="tel" autocomplete="tel" placeholder="55 0000 0000" class="bc-input"></div>
+        <div><label class="block text-white/65 text-xs mb-1.5" for="serviceSelect">Servicio</label>
+          <select id="serviceSelect" required class="bc-input"><option value="">Selecciona un servicio</option></select></div>
+        <div><label class="block text-white/65 text-xs mb-1.5" for="workerSelect">Barbero</label>
+          <select id="workerSelect" required class="bc-input"><option value="">Selecciona un barbero</option></select></div>
+        <div><label class="block text-white/65 text-xs mb-1.5" for="dateSelect">Fecha</label>
+          <input id="dateSelect" type="date" required class="bc-input"></div>
+        <div><label class="block text-white/65 text-xs mb-1.5" for="timeSelect">Hora</label>
+          <select id="timeSelect" required class="bc-input"><option value="">Selecciona servicio, barbero y fecha</option></select></div>
+        <div class="hp" aria-hidden="true"><label for="website">No llenar</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+        <label class="sm:col-span-2 flex gap-3 items-start text-white/65 text-xs mt-1">
+          <input id="privacyCheck" type="checkbox" required class="mt-0.5">
+          <span>He leído el <a href="#privacidad" class="text-white underline">Aviso de Privacidad</a> y acepto que usen mis datos para gestionar mi cita y contactarme por llamada o WhatsApp para confirmarla. Si la cita es para un menor de edad, declaro ser su madre, padre o tutor.</span>
+        </label>
+      </div>
+      <p class="text-white/45 text-xs mt-4 leading-relaxed" id="privacyFine"></p>
+      <button type="submit" id="bookingSubmit" class="w-full btn-gold rounded-full py-3 text-sm mt-4">Solicitar cita</button>
+      <p class="text-white/45 text-xs mt-3">Tu cita queda <span class="text-white/80">pendiente</span> hasta que el negocio la confirme.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="preguntas" class="sec bg-black glow-b">
+  <div class="wrap" style="max-width:48rem">
+    <div class="reveal sec-head"><p class="eyebrow" data-text="copy.faqLabel"></p><h2 class="sec-title" data-text="copy.faqTitle"></h2></div>
+    <div id="faqList" class="reveal-stagger space-y-2.5"></div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO ============ -->
+<section id="contacto" class="sec bg-black glow-a">
+  <div class="wrap">
+    <div class="reveal sec-head"><p class="eyebrow" data-text="copy.contactLabel"></p><h2 class="sec-title" id="contactTitle"></h2></div>
+    <div id="contactGrid" class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+  </div>
+</section>
+
+<!-- ============ LEGAL ============ -->
+<section class="sec bg-black" style="padding-top:3rem">
+  <div class="wrap text-white/65 text-sm leading-relaxed" style="max-width:48rem">
+    <div id="privacidad" style="scroll-margin-top:16px">
+      <p class="eyebrow">Legal</p>
+      <h2 class="sec-title gold-text">Aviso de Privacidad</h2>
+      <p class="text-white/45 text-xs mt-2 mb-6">Conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.</p>
+      <div class="space-y-4" id="privacyBody"></div>
+    </div>
+    <div id="terminos" style="margin-top:4rem;scroll-margin-top:16px">
+      <p class="eyebrow">Legal</p>
+      <h2 class="sec-title gold-text mb-6">Términos y condiciones</h2>
+      <div class="space-y-4" id="termsBody"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="pole" id="poleB"></div>
+<footer class="px-5 md:px-6 py-8">
+  <div class="wrap flex flex-col md:flex-row md:items-center justify-between gap-5 text-white/55 text-sm">
+    <div><p class="gold-text font-semibold text-lg" data-cfg="name"></p><p class="mt-0.5" data-cfg="tagline"></p></div>
+    <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Pie de página">
+      <a href="#servicios" class="hover:text-white transition-colors">Servicios</a>
+      <a href="#reservar" class="hover:text-white transition-colors">Reservar</a>
+      <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
+      <a href="#privacidad" class="hover:text-white transition-colors">Aviso de Privacidad</a>
+      <a href="#terminos" class="hover:text-white transition-colors">Términos</a>
+      <button id="loginBtnFooter" type="button" class="hover:text-white transition-colors">Acceso del equipo</button>
+    </nav>
+    <div class="text-xs"><p id="footerCopy"></p><p id="footerCredit" class="mt-1"></p></div>
+  </div>
+</footer>
+
+<a id="waFab" href="#" target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+</a>
+
+<!-- ============ LOGIN DEL EQUIPO ============ -->
+<div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="modal-box">
+    <button class="close" id="closeLogin" type="button" aria-label="Cerrar">×</button>
+    <p class="eyebrow">Acceso del equipo</p>
+    <h2 id="loginTitle" class="serif text-3xl gold-text mt-2">Ingresa a tu cuenta</h2>
+    <p class="text-white/50 text-sm mb-5 mt-1">Solo para propietario y barberos autorizados.</p>
+    <form id="loginForm">
+      <div id="loginMessage" role="status" aria-live="polite"></div>
+      <div class="mb-3"><label class="block text-white/65 text-xs mb-1.5" for="loginEmail">Correo</label>
+        <input id="loginEmail" type="email" required autocomplete="username" class="bc-input"></div>
+      <div class="mb-4"><label class="block text-white/65 text-xs mb-1.5" for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password" class="bc-input"></div>
+      <button class="w-full btn-gold rounded-full py-3 text-sm" id="loginSubmit" type="submit">Entrar</button>
+      <button class="text-white/60 text-xs underline mt-3" type="button" id="resetPass">¿Olvidaste tu contraseña?</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ AVISO POR WHATSAPP (tras confirmar una cita) ============ -->
+<div class="modal" id="waModal" role="dialog" aria-modal="true" aria-labelledby="waTitle">
+  <div class="modal-box">
+    <button class="close" id="closeWa" type="button" aria-label="Cerrar">×</button>
+    <p class="eyebrow">Cita confirmada</p>
+    <h2 id="waTitle" class="serif text-3xl gold-text mt-2">Enviar avisos por WhatsApp</h2>
+    <p class="text-white/55 text-sm mt-2" id="waSummary"></p>
+    <div class="flex flex-col gap-3 mt-5">
+      <a id="waClientBtn" class="abtn wa" style="padding:12px 18px;text-align:center;font-size:.9rem" href="#" target="_blank" rel="noopener noreferrer">Avisar al cliente</a>
+      <a id="waBarberBtn" class="abtn wa" style="padding:12px 18px;text-align:center;font-size:.9rem" href="#" target="_blank" rel="noopener noreferrer">Avisar al barbero</a>
+    </div>
+    <p class="adm-muted mt-4" id="waHint"></p>
+  </div>
+</div>
+
+<!-- ============ PANEL PRIVADO ============ -->
+<section id="adminApp" aria-label="Panel privado">
+  <div class="adm-shell">
+    <aside class="adm-side">
+      <p class="gold-text serif text-3xl" data-cfg="name"></p>
+      <nav aria-label="Panel">
+        <button class="side-btn active" data-panel="dashboard">Dashboard</button>
+        <button class="side-btn" data-panel="appointments">Citas</button>
+        <button class="side-btn" data-panel="workers" data-owner-only>Barberos</button>
+        <button class="side-btn" data-panel="services" data-owner-only>Servicios</button>
+        <button class="side-btn" data-panel="schedule" data-owner-only>Horarios</button>
+      </nav>
+      <button class="abtn danger" id="logoutBtn" style="margin-top:22px;width:100%">Cerrar sesión</button>
+    </aside>
+
+    <main class="adm-main">
+      <div class="flex items-center justify-between gap-4 mb-5">
+        <div><p class="eyebrow" id="roleLabel">Panel privado</p><h2 class="serif text-4xl text-white mt-1" id="panelTitle">Dashboard</h2></div>
+        <span class="badge pending" id="userEmailLabel"></span>
+      </div>
+      <div id="adminWarn"></div>
+
+      <div class="adm-panel active" id="panel-dashboard">
+        <div class="adm-grid">
+          <div class="metric"><span>Citas activas</span><strong id="mTotal">0</strong></div>
+          <div class="metric"><span>Pendientes</span><strong id="mPending">0</strong></div>
+          <div class="metric"><span>Completadas</span><strong id="mDone">0</strong></div>
+          <div class="metric"><span>Ingresos (completadas)</span><strong class="gold-text" id="mIncome">$0</strong></div>
+        </div>
+        <div class="adm-card" style="margin-top:14px"><h3>Próximas citas</h3><div id="dashboardUpcoming"></div></div>
+      </div>
+
+      <div class="adm-panel" id="panel-appointments">
+        <div class="adm-card">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input id="appointmentSearch" placeholder="Buscar nombre o teléfono" aria-label="Buscar cita" class="bc-input" style="max-width:320px">
+            <select id="statusFilter" aria-label="Filtrar por estado" class="bc-input" style="max-width:220px">
+              <option value="">Todos los estados</option><option value="pending">Pendientes</option><option value="confirmed">Confirmadas</option><option value="completed">Completadas</option><option value="cancelled">Canceladas</option>
+            </select>
+            <button class="abtn danger" id="purgeOld" type="button" data-owner-only style="display:none">Depurar citas antiguas</button>
+          </div>
+          <p class="adm-muted" style="margin-top:10px">Los datos de clientes son confidenciales: úsalos solo para gestionar citas.</p>
+          <div class="table-wrap"><table class="adm-table">
+            <thead><tr><th>Cliente</th><th>Servicio</th><th>Barbero</th><th>Fecha</th><th>Hora</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="appointmentsBody"></tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <div class="adm-panel" id="panel-workers" data-owner-panel>
+        <div class="adm-card">
+          <h3>Barberos</h3>
+          <p class="adm-muted">Define quién aparece en la reserva. El WhatsApp del barbero se usa para avisarle de sus citas y no se muestra al público. Para que un barbero entre al panel: crea su usuario en Supabase (Authentication → Users), agrega su fila en <code>profiles</code> (rol <code>barbero</code>, activo <code>true</code>) y pega aquí su UID.</p>
+          <form id="workerForm" class="form-grid" style="margin-top:16px">
+            <div><label for="workerName">Nombre</label><input id="workerName" maxlength="60" minlength="2" required class="bc-input"></div>
+            <div><label for="workerPhone">WhatsApp del barbero (opcional)</label><input id="workerPhone" maxlength="20" inputmode="tel" class="bc-input"></div>
+            <div class="full"><label for="workerUid">UID de su cuenta (opcional)</label><input id="workerUid" maxlength="128" class="bc-input"></div>
+            <div class="full"><button class="abtn gold" type="submit">Agregar barbero</button></div>
+          </form>
+          <div id="workersList" class="barber-grid"></div>
+        </div>
+      </div>
+
+      <div class="adm-panel" id="panel-services" data-owner-panel>
+        <div class="adm-card">
+          <h3>Servicios</h3>
+          <form id="serviceForm" class="form-grid" style="margin-top:16px">
+            <input type="hidden" id="serviceId">
+            <div><label for="serviceName">Nombre</label><input id="serviceName" maxlength="80" minlength="2" required class="bc-input"></div>
+            <div><label for="servicePrice">Precio (IVA incluido)</label><input id="servicePrice" type="number" min="0" max="100000" required class="bc-input"></div>
+            <div><label for="serviceDuration">Duración (min, máx. 180)</label><input id="serviceDuration" type="number" min="5" max="180" step="5" required class="bc-input"></div>
+            <div><label for="serviceActive">Visible al público</label><select id="serviceActive" class="bc-input"><option value="true">Sí</option><option value="false">No</option></select></div>
+            <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="abtn gold" type="submit">Guardar servicio</button>
+              <button class="abtn" type="button" id="clearService">Limpiar</button>
+              <button class="abtn" type="button" id="seedServices">Cargar servicios de ejemplo</button>
+            </div>
+          </form>
+          <div class="table-wrap"><table class="adm-table">
+            <thead><tr><th>Servicio</th><th>Precio</th><th>Duración</th><th>Visible</th><th>Acciones</th></tr></thead>
+            <tbody id="servicesBody"></tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <div class="adm-panel" id="panel-schedule" data-owner-panel>
+        <div class="adm-card">
+          <h3>Horarios</h3>
+          <p class="adm-muted">Apertura y cierre de cada día. Los clientes solo verán huecos dentro de este horario.</p>
+          <div id="scheduleGrid" style="display:grid;gap:8px;margin-top:16px"></div>
+          <h3 style="margin-top:24px">Fechas bloqueadas (feriados, vacaciones)</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <input type="date" id="blockDate" aria-label="Fecha a bloquear" class="bc-input" style="max-width:220px">
+            <button class="abtn" type="button" id="addBlock">Bloquear fecha</button>
+          </div>
+          <div class="chips" id="blockedChips"></div>
+          <button class="abtn gold" id="saveSchedule" style="margin-top:20px;padding:10px 22px">Guardar horarios</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+(function () {
+  "use strict";
+
+  /* =====================================================================
+     CONFIG — TODO lo personalizable por barbería vive aquí.
+     Cambia estos valores y se reflejan en toda la página automáticamente:
+     nombre, colores, textos, videos/fotos, precios, horarios, redes, etc.
+     No hace falta tocar nada más abajo de este bloque para adaptar el
+     sitio a un negocio distinto.
+  ===================================================================== */
+  const CONFIG = {
+    name: "Black Crown",
+    tagline: "Barbería premium.",
+    logo: "", // URL de imagen para el logo del navbar; vacío = ícono por defecto
+
+    // ---- datos legales / contacto (se resaltan en amarillo si faltan) ----
+    legalName: "",
+    address: "",
+    phone: "",
+    whatsapp: "",       // WhatsApp general del negocio (recepción/dueño)
+    email: "",
+    privacyEmail: "",
+    mapsUrl: "",
+    instagram: "",
+    facebook: "",
+
+    // ---- colores ----
+    colors: {
+      gold: "#f2b544", goldSoft: "#ffe29a", goldDeep: "#d98a1f",
+      poleA: "#d62839", poleB: "#2563eb"
+    },
+    stripeMotif: true, // franjas rojo/blanco/azul tipo poste de barbería
+
+    // ---- medios (Mixkit = licencia libre, uso comercial permitido, sin marca de agua) ----
+    media: {
+      heroVideo: "https://assets.mixkit.co/videos/40604/40604-360.mp4",
+      featuredVideo: "https://assets.mixkit.co/videos/43223/43223-360.mp4",
+      philosophyVideo: "https://assets.mixkit.co/videos/40122/40122-360.mp4",
+      gallery: [
+        { src: "https://images.unsplash.com/photo-1731655257703-99d690707781?auto=format&fit=crop&w=800&q=75", alt: "Tijeras de barbería" },
+        { src: "https://images.unsplash.com/photo-1611313151697-d626e818dddf?auto=format&fit=crop&w=800&q=75", alt: "Silla de barbería" },
+        { src: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=800&q=75", alt: "Interior de barbería" },
+        { src: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=75", alt: "Herramientas de barbería" }
+      ]
+    },
+
+    // ---- textos ----
+    copy: {
+      heroTitle: 'Tu estilo, tu <em class="italic gold-text">corona</em>.',
+      heroSubtitle: "Sin pagos en línea, sin crear cuenta. Elige servicio, barbero y horario, y nosotros confirmamos tu cita.",
+      heroButton: "Conocer más",
+      aboutLabel: "Sobre nosotros",
+      aboutTitle: 'Un corte con <em class="italic gold-text">carácter</em> para quienes <em class="italic gold-text">cuidan cada detalle, cada línea.</em>',
+      approachLabel: "Nuestro enfoque",
+      approachText: "Cada visita empieza con una conversación: cómo quieres verte, qué tanto quieres cambiar y qué es lo que nunca tocaríamos. De ahí sale el corte, no al revés.",
+      approachButton: "Ver servicios",
+      philosophyTitle: 'Oficio <em class="italic gold-text">x</em> Estilo',
+      servicesLabel: "Nuestros servicios",
+      servicesTitle: "Qué hacemos",
+      menuLabel: "Menú",
+      menuTitle: "Elige tu servicio y reserva en línea.",
+      teamLabel: "Nuestro equipo",
+      teamTitle: "Manos que saben.",
+      galleryLabel: "Nuestro trabajo",
+      galleryTitle: "Detalles que hablan.",
+      bookingLabel: "Agenda online",
+      bookingTitle: 'Reserva tu <em class="italic gold-text">cita.</em>',
+      bookingText: "Elige tu servicio, barbero, fecha y horario. No necesitas crear una cuenta y no se realiza ningún cobro en línea.",
+      faqLabel: "Preguntas frecuentes",
+      faqTitle: "Antes de venir.",
+      contactLabel: "Contacto",
+      contactTitle: "Nos vemos en {name}."
+    },
+
+    aboutFeatures: [
+      { title: "Precisión", body: "Trabajo detallado y personalizado en cada corte." },
+      { title: "Experiencia", body: "Servicios pensados para cada estilo y ocasión." },
+      { title: "Reserva fácil", body: "Agenda en pocos pasos, sin crear una cuenta." },
+      { title: "Ambiente", body: "Una identidad oscura, elegante y sin prisas." }
+    ],
+
+    philosophyBlocks: [
+      { label: "Elige tu estilo", body: "Fade, taper, diseño de barba o un cambio completo: hablamos contigo antes de tocar la máquina para que el resultado se sienta tuyo, no genérico." },
+      { label: "Mantén tu imagen", body: "Un buen corte se nota más cuando se mantiene. Te recomendamos cada cuánto volver y cómo cuidar tu corte y tu barba entre visitas." }
+    ],
+
+    serviceCards: [
+      { video: "https://assets.mixkit.co/videos/43232/43232-360.mp4", tag: "Corte", title: "Fades & diseños", description: "Del clásico al degradado más cerrado. Trabajamos con tijera y máquina para líneas limpias y acabados que aguantan semanas." },
+      { video: "https://assets.mixkit.co/videos/40123/40123-360.mp4", tag: "Barba", title: "Barba & detalle", description: "Diseño, perfilado y toalla caliente. Terminamos cada servicio con la misma atención con la que empezamos el corte." }
+    ],
+
+    bookingSteps: [
+      "Elige servicio y barbero.",
+      "Selecciona un horario disponible.",
+      "Recibe la confirmación de tu cita por WhatsApp."
+    ],
+
+    business: {
+      priceNote: "Precios en pesos mexicanos (MXN), IVA incluido.",
+      cancellationPolicy: "Puedes cancelar o reprogramar tu cita avisando por teléfono o WhatsApp con al menos 2 horas de anticipación. No se realiza ningún cargo por cancelar.",
+      toleranceMinutes: 10,
+      retentionMonths: 12,
+      privacyUpdated: "27 de septiembre de 2026",
+      privacyVersion: "2026-09",
+      bookingWindowDays: 45,
+      minLeadMinutes: 60,
+      slotStep: 15
+    },
+
+    faqs: [
+      ["¿Necesito crear una cuenta?", "No. Solo eliges tu servicio, barbero y horario, y dejas tu nombre y teléfono."],
+      ["¿Cómo sé que mi cita está confirmada?", "En cuanto el negocio confirme tu solicitud, te llegará un mensaje de WhatsApp con los detalles."],
+      ["¿Hay que pagar en línea?", "No. No se realiza ningún cobro en el sitio; el servicio se paga en el establecimiento."],
+      ["¿Los precios incluyen IVA?", "Sí, todos los precios ya incluyen IVA."],
+      ["¿Puedo cancelar o cambiar mi cita?", "Puedes cancelar o reprogramar avisando por teléfono o WhatsApp con al menos 2 horas de anticipación, sin costo."],
+      ["¿Qué pasa si llego tarde?", "Contamos con algunos minutos de tolerancia; después, el servicio podría reprogramarse según la agenda."],
+      ["¿Atienden niños?", "Sí, con el servicio Corte para Niño. La cita debe ser solicitada por su madre, padre o tutor."]
+    ],
+
+    hours: {
+      lunes: { active: true, start: "09:00", end: "18:00" },
+      martes: { active: true, start: "09:00", end: "18:00" },
+      miercoles: { active: true, start: "09:00", end: "18:00" },
+      jueves: { active: true, start: "09:00", end: "18:00" },
+      viernes: { active: true, start: "09:00", end: "18:00" },
+      sabado: { active: true, start: "09:00", end: "14:00" },
+      domingo: { active: false, start: "09:00", end: "14:00" }
+    },
+
+    defaultServices: [
+      ["Corte Masculino", 180, 45], ["Corte para Niño", 150, 45], ["Fade / Degradado", 220, 60],
+      ["Taper Fade", 220, 60], ["Diseño de Barba", 150, 30], ["Facial", 180, 45],
+      ["Exfoliación", 150, 30], ["Combo Premium", 350, 90], ["Mullet", 220, 60], ["Diseño Especial", 280, 75]
+    ].map(([name, price, duration]) => ({ name, price, duration, active: true })),
+
+    // ---- Supabase: mismo proyecto que ya usaba tu index.html original ----
+    supabaseUrl: "https://sempixancduzgpuiiqui.supabase.co",
+    supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlbXBpeGFuY2R1emdwdWlpcXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQ1ODUsImV4cCI6MjEwNjAwMDU4NX0.umOG2OBYadw8_oLMKlAXXomKnY5rcOyh8Bft9sjUl5E",
+
+    showCredit: true
+  };
+
+  /* =====================================================================
+     Motor de plantilla: nada de lo de abajo debería necesitar cambios
+     para adaptar el sitio a otra barbería — solo edita CONFIG arriba.
+  ===================================================================== */
+  const $ = id => document.getElementById(id);
+  const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+  const getPath = (obj, path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
+  const money = n => new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(Number(n) || 0);
+  const digits = s => String(s || "").replace(/\D/g, "");
+  const pad = n => String(n).padStart(2, "0");
+  const toDateStr = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const todayString = () => toDateStr(new Date());
+  const dateObj = s => new Date(`${s}T00:00:00`);
+  const minToTime = m => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+  const timeToMin = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const prettyDate = s => dateObj(s).toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+  const overlaps = (sA, dA, sB, dB) => { const a = timeToMin(sA), b = timeToMin(sB); return a < b + dB && b < a + dA; };
+  const waLink = (phone, text) => { const d = digits(phone); return d ? `https://wa.me/${d}?text=${encodeURIComponent(text)}` : ""; };
+
+  const FIELD_LABELS = { legalName: "NOMBRE LEGAL / RAZÓN SOCIAL", address: "DOMICILIO", phone: "TELÉFONO", email: "CORREO", privacyEmail: "CORREO DE PRIVACIDAD" };
+  const todoMark = key => `<mark style="background:#fde047;color:#000;padding:1px 6px;border-radius:4px;font-weight:600">[FALTA: ${FIELD_LABELS[key] || key}]</mark>`;
+  const fieldHtml = key => { const v = CONFIG[key]; return (v !== undefined && v !== "") ? esc(v) : todoMark(key); };
+
+  function applyConfig() {
+    document.title = `${CONFIG.name} | Barbería`;
+    $("metaDesc").setAttribute("content", `${CONFIG.name} — barbería. Cortes, fades, barba y servicios exclusivos. Reserva tu cita en línea.`);
+
+    const root = document.documentElement.style;
+    root.setProperty("--gold", CONFIG.colors.gold);
+    root.setProperty("--gold-soft", CONFIG.colors.goldSoft);
+    root.setProperty("--gold-deep", CONFIG.colors.goldDeep);
+    root.setProperty("--pole-a", CONFIG.colors.poleA);
+    root.setProperty("--pole-b", CONFIG.colors.poleB);
+    const hexToRgb = h => { const n = parseInt(h.replace("#", ""), 16); return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`; };
+    try {
+      root.setProperty("--accent-rgb", hexToRgb(CONFIG.colors.gold));
+      root.setProperty("--pole-a-rgb", hexToRgb(CONFIG.colors.poleA));
+      root.setProperty("--pole-b-rgb", hexToRgb(CONFIG.colors.poleB));
+    } catch (_) {}
+
+    if (!CONFIG.stripeMotif) { const a = $("poleA"), b = $("poleB"); if (a) a.style.display = "none"; if (b) b.style.display = "none"; }
+
+    if (CONFIG.logo) $("brandMark").innerHTML = `<img src="${esc(CONFIG.logo)}" alt="${esc(CONFIG.name)}" style="height:24px;width:auto;display:block">`;
+
+    document.querySelectorAll("[data-cfg]").forEach(el => { el.textContent = CONFIG[el.dataset.cfg] ?? ""; });
+    document.querySelectorAll("[data-text]").forEach(el => { el.textContent = getPath(CONFIG, el.dataset.text) ?? ""; });
+    document.querySelectorAll("[data-rich]").forEach(el => { el.innerHTML = getPath(CONFIG, el.dataset.rich) ?? ""; });
+    document.querySelectorAll("[data-src]").forEach(el => { el.src = getPath(CONFIG, el.dataset.src) ?? ""; });
+
+    $("contactTitle").textContent = (CONFIG.copy.contactTitle || "").replace("{name}", CONFIG.name);
+    $("footerCopy").textContent = `© ${new Date().getFullYear()} ${CONFIG.name}. Todos los derechos reservados.`;
+    $("footerCredit").textContent = CONFIG.showCredit ? "Plantilla de reservas para barberías." : "";
+  }
+
+  /* Supabase */
+  const DEMO = /PEGA_AQUI/.test(CONFIG.supabaseUrl) || /PEGA_AQUI/.test(CONFIG.supabaseAnonKey);
+  const sb = (!DEMO && window.supabase) ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey) : null;
+
+  const DAY_KEYS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  const DAY_LABEL = { lunes: "Lunes", martes: "Martes", miercoles: "Miércoles", jueves: "Jueves", viernes: "Viernes", sabado: "Sábado", domingo: "Domingo" };
+  const DAY_ORDER = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+
+  function toast(msg) {
+    let t = $("toast");
+    if (!t) {
+      t = document.createElement("div"); t.id = "toast";
+      t.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);z-index:900;background:#1b1b1e;border:1px solid #29292e;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.3s;max-width:90vw;font-size:.9rem;color:#fff";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = "1"; t.style.transform = "translateX(-50%) translateY(0)";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateX(-50%) translateY(20px)"; }, 3800);
+  }
+
+  /* ===== capa de datos ===== */
+  const mem = { citas: [], nextId: 1 };
+  const data = {
+    async services() {
+      if (!sb) return CONFIG.defaultServices.map((s, i) => ({ id: "demo-" + i, ...s }));
+      const { data, error } = await sb.from("servicios").select("*").eq("active", true);
+      if (error || !data || !data.length) return CONFIG.defaultServices.map((s, i) => ({ id: "demo-" + i, ...s }));
+      return data;
+    },
+    async barbers() {
+      const fallback = [{ id: "demo-1", nombre: "Barbero de ejemplo 1", activo: true, whatsapp: "" }, { id: "demo-2", nombre: "Barbero de ejemplo 2", activo: true, whatsapp: "" }];
+      if (!sb) return fallback;
+      const { data, error } = await sb.from("barberos").select("*").eq("activo", true);
+      if (error || !data || !data.length) return fallback;
+      return data;
+    },
+    async config() {
+      if (!sb) return { days: CONFIG.hours, blockedDates: [] };
+      const { data, error } = await sb.from("configuracion").select("*").eq("id", "general").maybeSingle();
+      if (error || !data) return { days: CONFIG.hours, blockedDates: [] };
+      return { days: data.days || CONFIG.hours, blockedDates: data.blocked_dates || [] };
+    },
+    async busy(date, workerId) {
+      if (!sb) return mem.citas.filter(c => c.workerId === workerId && c.date === date && c.status !== "cancelled");
+      const { data, error } = await sb.from("citas").select("time,duration,status").eq("date", date).eq("worker_id", workerId).in("status", ["pending", "confirmed"]);
+      if (error || !data) return [];
+      return data;
+    },
+    async createBooking(p) {
+      if (!sb) {
+        const conflict = mem.citas.some(c => c.workerId === p.workerId && c.date === p.date && c.time === p.time && c.status !== "cancelled");
+        if (conflict) { const e = new Error("conflict"); e.code = "23505"; throw e; }
+        mem.citas.push({ id: mem.nextId++, status: "pending", ...p });
+        return;
+      }
+      const { error } = await sb.from("citas").insert({
+        name: p.name, phone: p.phone, service_id: p.serviceId, service: p.service,
+        date: p.date, time: p.time, duration: p.duration, price: p.price,
+        worker_id: p.workerId, status: "pending",
+        privacy_accepted: true, privacy_version: CONFIG.business.privacyVersion
+      });
+      if (error) throw error;
+    }
+  };
+
+  let services = [], barbers = [], bookingConfig = { days: CONFIG.hours, blockedDates: [] };
+  let refreshToken = 0;
+
+  /* ===== hero: video, mini-form, redes ===== */
+  (function heroVideoFade() {
+    const video = $("heroVideo");
+    video.src = CONFIG.media.heroVideo;
+    let raf = 0;
+    const fade = (from, to, dur, onDone) => {
+      cancelAnimationFrame(raf);
+      const start = performance.now();
+      const step = now => {
+        const t = Math.min(1, (now - start) / dur);
+        video.style.opacity = String(from + (to - from) * t);
+        if (t < 1) raf = requestAnimationFrame(step); else if (onDone) onDone();
+      };
+      raf = requestAnimationFrame(step);
+    };
+    video.addEventListener("canplay", () => { video.play().catch(() => {}); fade(0, 1, 500); });
+    video.addEventListener("timeupdate", () => {
+      if (!video.duration) return;
+      if (video.duration - video.currentTime <= 0.55) fade(Number(video.style.opacity || 1), 0, 500);
+    });
+    video.addEventListener("ended", () => {
+      video.style.opacity = "0";
+      setTimeout(() => { video.currentTime = 0; video.play().catch(() => {}); fade(0, 1, 500); }, 100);
+    });
+  })();
+
+  $("heroForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const v = $("heroPhone").value.trim();
+    if (v) { try { localStorage.setItem("bc_phone_prefill", v); } catch (_) {} }
+    $("reservar").scrollIntoView({ behavior: "smooth" });
+  });
+
+  (function renderSocials() {
+    const wa = digits(CONFIG.whatsapp);
+    const icons = {
+      instagram: '<path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Z"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
+      facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/>',
+      whatsapp: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/>'
+    };
+    const mk = (href, path) => `<a href="${href}" target="_blank" rel="noopener noreferrer" class="liquid-glass rounded-full p-3.5 text-white/80 hover:text-white hover:bg-white/5 transition-all"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg></a>`;
+    $("heroSocials").innerHTML = mk(CONFIG.instagram || "#", icons.instagram) + mk(CONFIG.facebook || "#", icons.facebook) + mk(wa ? `https://wa.me/${wa}` : "#", icons.whatsapp);
+
+    const fab = $("waFab");
+    if (wa) { fab.href = `https://wa.me/${wa}`; fab.classList.add("show"); }
+  })();
+
+  /* ===== reveal ===== */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("visible"); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: "-70px" });
+  function watchReveal() { document.querySelectorAll(".reveal, .reveal-stagger").forEach(el => io.observe(el)); }
+
+  /* ===== bloques desde CONFIG ===== */
+  function renderStaticBlocks() {
+    $("aboutFeatures").innerHTML = CONFIG.aboutFeatures.map(f => `
+      <div class="liquid-glass rounded-2xl p-5"><p class="text-gold font-medium text-sm">${esc(f.title)}</p><p class="text-white/55 text-sm mt-1 leading-relaxed">${esc(f.body)}</p></div>`).join("");
+
+    $("philoBlocks").innerHTML = CONFIG.philosophyBlocks.map((b, i) => `
+      ${i > 0 ? '<div class="w-full h-px bg-white/10"></div>' : ""}
+      <div><p class="eyebrow mb-2">${esc(b.label)}</p><p class="body-text" style="font-size:1rem">${esc(b.body)}</p></div>`).join("");
+
+    $("serviceCards").innerHTML = CONFIG.serviceCards.map(c => `
+      <div class="group liquid-glass rounded-3xl overflow-hidden">
+        <div class="relative aspect-video overflow-hidden">
+          <video class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" muted autoplay loop playsinline preload="auto" src="${esc(c.video)}"></video>
+          <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top, rgba(0,0,0,.4), transparent)"></div>
+        </div>
+        <div class="p-5 md:p-6">
+          <p class="eyebrow" style="margin-bottom:2px">${esc(c.tag)}</p>
+          <div class="flex items-start justify-between gap-4 mt-1">
+            <h3 class="text-white text-xl tracking-tight">${esc(c.title)}</h3>
+            <div class="liquid-glass rounded-full p-2 shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+          </div>
+          <p class="text-white/55 text-sm leading-relaxed mt-2">${esc(c.description)}</p>
+        </div>
+      </div>`).join("");
+
+    $("galleryGrid").innerHTML = CONFIG.media.gallery.map(g => `
+      <figure class="rounded-2xl overflow-hidden aspect-[4/5] bg-white/5">
+        <img src="${esc(g.src)}" alt="${esc(g.alt)}" loading="lazy" class="w-full h-full object-cover grayscale-[.15] hover:grayscale-0 hover:scale-105 transition-all duration-500">
+      </figure>`).join("");
+
+    $("bookingSteps").innerHTML = CONFIG.bookingSteps.map((s, i) => `
+      <li class="flex gap-3"><span class="liquid-glass w-6 h-6 rounded-full flex items-center justify-center text-gold text-xs shrink-0">${i + 1}</span>${esc(s)}</li>`).join("");
+
+    $("faqList").innerHTML = CONFIG.faqs.map(([q, a]) => `
+      <details class="liquid-glass rounded-2xl px-5 py-3.5 group">
+        <summary class="cursor-pointer flex items-center justify-between gap-4 text-white font-medium text-sm">${esc(q)}<span class="text-gold text-lg group-open:rotate-45 transition-transform">+</span></summary>
+        <p class="text-white/55 text-sm mt-2.5 leading-relaxed">${esc(a)}</p>
+      </details>`).join("");
+
+    $("priceNoteText").textContent = CONFIG.business.priceNote;
+    $("privacyFine").innerHTML = `${esc(CONFIG.name)} usa tu nombre y teléfono solo para registrar, confirmar y administrar tu cita, y para contactarte por llamada o WhatsApp sobre ella. No vendemos tus datos ni los usamos para publicidad.`;
+  }
+
+  function renderContact() {
+    const tel = digits(CONFIG.phone), wa = digits(CONFIG.whatsapp);
+    const hoursHtml = DAY_ORDER.map(d => { const v = CONFIG.hours[d]; return `<li class="flex justify-between gap-3"><span>${DAY_LABEL[d]}</span><span>${v.active ? `${v.start} – ${v.end}` : "Cerrado"}</span></li>`; }).join("");
+    const icon = p => `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gold">${p}</svg>`;
+    $("contactGrid").innerHTML = `
+      <div class="liquid-glass rounded-2xl p-5">${icon('<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>')}
+        <p class="text-gold font-medium text-sm mt-2.5">Ubicación</p><p class="text-white/55 text-sm mt-1">${fieldHtml("address")}</p>
+        ${CONFIG.mapsUrl ? `<a href="${esc(CONFIG.mapsUrl)}" target="_blank" rel="noopener noreferrer" class="text-white text-xs underline mt-2 inline-block">Cómo llegar</a>` : ""}</div>
+      <div class="liquid-glass rounded-2xl p-5">${icon('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"/>')}
+        <p class="text-gold font-medium text-sm mt-2.5">Teléfono</p><p class="text-white/55 text-sm mt-1">${tel ? `<a href="tel:+${tel.length === 10 ? "52" : ""}${tel}" class="underline">${esc(CONFIG.phone)}</a>` : fieldHtml("phone")}</p>
+        ${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer" class="text-white text-xs underline mt-2 inline-block">WhatsApp</a>` : ""}</div>
+      <div class="liquid-glass rounded-2xl p-5">${icon('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>')}
+        <p class="text-gold font-medium text-sm mt-2.5">Correo</p><p class="text-white/55 text-sm mt-1">${CONFIG.email ? `<a href="mailto:${esc(CONFIG.email)}" class="underline">${esc(CONFIG.email)}</a>` : fieldHtml("email")}</p></div>
+      <div class="liquid-glass rounded-2xl p-5">${icon('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>')}
+        <p class="text-gold font-medium text-sm mt-2.5">Horario</p><ul class="text-white/55 text-sm mt-1 space-y-1">${hoursHtml}</ul></div>`;
+
+    if (CONFIG.address && CONFIG.phone) {
+      const ld = { "@context": "https://schema.org", "@type": "HairSalon", name: CONFIG.name, telephone: CONFIG.phone, address: CONFIG.address };
+      if (CONFIG.email) ld.email = CONFIG.email;
+      const s = document.createElement("script"); s.type = "application/ld+json"; s.textContent = JSON.stringify(ld);
+      document.head.appendChild(s);
+    }
+  }
+
+  function renderLegal() {
+    $("privacyBody").innerHTML = `
+      <div><h3 class="text-gold font-medium mb-1 text-sm">1. Responsable</h3><p>${fieldHtml("legalName")}, con nombre comercial <strong class="text-white/85">${esc(CONFIG.name)}</strong> y domicilio en ${fieldHtml("address")}, es responsable del tratamiento de los datos personales que se recaben a través de este sitio.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">2. Datos personales que recabamos</h3><ul class="list-disc pl-5 space-y-1"><li>Nombre y número telefónico (incluido WhatsApp).</li><li>Datos de la reservación: servicio, barbero, fecha y hora.</li></ul><p class="mt-2">No solicitamos datos sensibles, financieros ni patrimoniales. No se realizan cobros en este sitio.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">3. Finalidades del tratamiento</h3><p><strong class="text-white/85">Necesarias:</strong> registrar, confirmar, administrar, modificar o cancelar tu cita; contactarte sobre ella por teléfono o WhatsApp; llevar el control interno de la agenda y cumplir obligaciones legales aplicables.</p><p class="mt-2"><strong class="text-white/85">Adicionales:</strong> no usamos tus datos para mercadotecnia ni prospección comercial.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">4. Menores de edad</h3><p>Los servicios para menores deben ser solicitados por su madre, padre o tutor, quien otorga el consentimiento para el tratamiento de los datos del menor.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">5. Transferencias y encargados</h3><p>No transferimos tus datos a terceros, salvo requerimiento de autoridad competente. Usamos servicios de infraestructura en la nube (base de datos y hosting) como encargados, bajo medidas de seguridad, que pueden procesar datos en servidores fuera de México. El aviso de la cita confirmada se envía por WhatsApp, un servicio de Meta Platforms.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">6. Derechos ARCO y revocación</h3><p>Puedes solicitar Acceso, Rectificación, Cancelación u Oposición al tratamiento de tus datos, así como revocar tu consentimiento, escribiendo a ${fieldHtml("privacyEmail")} con tu nombre, medio para responderte, tu solicitud y un documento que acredite tu identidad. Respondemos en máximo 20 días hábiles.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">7. Conservación</h3><p>Conservamos los datos de tus citas durante ${CONFIG.business.retentionMonths} meses posteriores a la cita y después se eliminan, salvo obligación legal de conservarlos más tiempo.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">8. Cookies y tecnologías similares</h3><p>No usamos cookies de publicidad ni analítica. El navegador guarda de forma local, solo en tu dispositivo, datos técnicos para evitar envíos duplicados; nunca salen de tu navegador. Al cargar el sitio, tu navegador pide tipografías a Google Fonts, lo que puede revelar tu IP a ese proveedor.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">9. Cambios a este aviso</h3><p>Cualquier cambio se publicará en esta misma página. Última actualización: ${esc(CONFIG.business.privacyUpdated)}.</p></div>`;
+
+    $("termsBody").innerHTML = `
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Proveedor</h3><p>${fieldHtml("legalName")} · ${fieldHtml("address")} · Tel. ${fieldHtml("phone")} · ${fieldHtml("email")}</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Reservaciones</h3><p>La solicitud de una cita está sujeta a disponibilidad y a la confirmación del negocio. Mientras no sea confirmada, la cita permanece como pendiente. No se requiere anticipo ni se realiza ningún cobro en línea.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Precios</h3><p>${esc(CONFIG.business.priceNote)} El precio se paga en el establecimiento al recibir el servicio.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Cancelaciones y reprogramaciones</h3><p>${esc(CONFIG.business.cancellationPolicy)}</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Retrasos</h3><p>Contamos con ${CONFIG.business.toleranceMinutes} minutos de tolerancia. Pasado ese tiempo, el negocio podrá reprogramar o ajustar el servicio según la disponibilidad de la agenda.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Uso del sitio</h3><p>Al reservar, declaras que los datos proporcionados son verdaderos. El negocio puede cancelar solicitudes con datos falsos o uso indebido del sistema.</p></div>
+      <div><h3 class="text-gold font-medium mb-1 text-sm">Quejas</h3><p>Para aclaraciones escribe a ${fieldHtml("email")}. También puedes acudir a la Procuraduría Federal del Consumidor (Profeco).</p></div>`;
+  }
+
+  /* ===== menú + equipo (desde Supabase, con respaldo) ===== */
+  async function renderPricing() {
+    services = await data.services();
+    $("pricingGrid").innerHTML = services.map(s => `
+      <div class="liquid-glass rounded-2xl p-4 flex items-start justify-between gap-4">
+        <div><p class="text-white font-medium text-sm">${esc(s.name)}</p><p class="text-white/50 text-xs mt-0.5">${esc(s.duration)} min</p></div>
+        <p class="gold-text font-semibold whitespace-nowrap">${money(s.price)}</p>
+      </div>`).join("");
+    renderServiceSelect();
+  }
+  async function renderTeam() {
+    barbers = await data.barbers();
+    renderWorkerSelect();
+    if (!barbers.length) return;
+    $("equipo").style.display = "";
+    $("teamGrid").innerHTML = barbers.map(b => {
+      const initials = (b.nombre || "?").split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+      return `<div class="liquid-glass rounded-2xl p-5 text-center"><div class="w-12 h-12 mx-auto rounded-full btn-gold flex items-center justify-center font-medium">${esc(initials)}</div><p class="text-white text-sm mt-2.5">${esc(b.nombre || "Barbero")}</p></div>`;
+    }).join("");
+    watchReveal();
+  }
+  function renderServiceSelect() { $("serviceSelect").innerHTML = `<option value="">Selecciona un servicio</option>` + services.map(s => `<option value="${esc(s.id)}">${esc(s.name)} — ${esc(s.duration)} min</option>`).join(""); }
+  function renderWorkerSelect() { $("workerSelect").innerHTML = `<option value="">Selecciona un barbero</option>` + barbers.map(b => `<option value="${esc(b.id)}">${esc(b.nombre || "Barbero")}</option>`).join(""); }
+
+  /* ===== disponibilidad + reserva ===== */
+  $("dateSelect").min = todayString();
+  const maxDateObj = new Date(); maxDateObj.setDate(maxDateObj.getDate() + CONFIG.business.bookingWindowDays);
+  $("dateSelect").max = toDateStr(maxDateObj);
+
+  const getService = () => services.find(s => s.id == $("serviceSelect").value);
+  const getDayConfig = date => (bookingConfig.days || CONFIG.hours)[DAY_KEYS[dateObj(date).getDay()]];
+
+  async function refreshTimes() {
+    const date = $("dateSelect").value, service = getService(), workerId = $("workerSelect").value;
+    const sel = $("timeSelect");
+    const setMsg = t => { sel.innerHTML = `<option value="">${esc(t)}</option>`; };
+    if (!date || !service || !workerId) return setMsg("Selecciona servicio, barbero y fecha");
+    if (date < todayString() || date > $("dateSelect").max) return setMsg("Fecha fuera del rango de reservas");
+    if ((bookingConfig.blockedDates || []).includes(date)) return setMsg("Fecha no disponible");
+    const dayConfig = getDayConfig(date);
+    if (!dayConfig || !dayConfig.active) return setMsg("Día cerrado");
+
+    setMsg("Cargando…");
+    const token = ++refreshToken;
+    let busyRows;
+    try { busyRows = await data.busy(date, workerId); } catch (e) { console.error(e); return setMsg("No se pudo consultar la disponibilidad"); }
+    if (token !== refreshToken) return;
+
+    const start = timeToMin(dayConfig.start), end = timeToMin(dayConfig.end);
+    const now = new Date();
+    const minStart = now.getHours() * 60 + now.getMinutes() + CONFIG.business.minLeadMinutes;
+    const duration = Number(service.duration);
+    const options = [];
+    for (let t = start; t + duration <= end; t += CONFIG.business.slotStep) {
+      if (date === todayString() && t < minStart) continue;
+      const slotTime = minToTime(t);
+      if (busyRows.some(b => overlaps(slotTime, duration, b.time, Number(b.duration)))) continue;
+      options.push(`<option value="${slotTime}">${slotTime}</option>`);
+    }
+    sel.innerHTML = options.length ? `<option value="">Selecciona una hora</option>${options.join("")}` : `<option value="">No hay horarios disponibles</option>`;
+  }
+  ["serviceSelect", "workerSelect", "dateSelect"].forEach(id => { $(id).onchange = refreshTimes; });
+
+  function showMsg(message, type, extraHtml) {
+    $("bookingMessage").innerHTML = message ? `<div class="rounded-xl px-4 py-3 mb-4 text-sm border ${type === "ok" ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200" : "border-red-500/30 bg-red-500/10 text-red-200"}">${esc(message)}${extraHtml || ""}</div>` : "";
+  }
+
+  $("bookingForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    showMsg("");
+    if ($("website").value) { showMsg("Solicitud recibida.", "ok"); return; }
+
+    const name = $("clientName").value.trim().replace(/\s+/g, " ");
+    const phone = $("clientPhone").value.trim();
+    const service = getService();
+    const worker = barbers.find(w => w.id == $("workerSelect").value);
+    const date = $("dateSelect").value, time = $("timeSelect").value;
+
+    if (name.length < 2) return showMsg("Escribe tu nombre completo.", "err");
+    if (!/^[0-9+() -]{8,20}$/.test(phone) || digits(phone).length < 8 || digits(phone).length > 15) return showMsg("Escribe un teléfono válido (solo números, 8 a 15 dígitos).", "err");
+    if (!service || !worker) return showMsg("Selecciona servicio y barbero.", "err");
+    if (!date || !time || date < todayString()) return showMsg("Selecciona una fecha y hora válidas.", "err");
+    if (!$("privacyCheck").checked) return showMsg("Debes aceptar el Aviso de Privacidad para continuar.", "err");
+    try { if (Date.now() - Number(localStorage.getItem("bc_last") || 0) < 30000) return showMsg("Espera unos segundos antes de enviar otra solicitud.", "err"); } catch (_) {}
+
+    const btn = $("bookingSubmit");
+    btn.disabled = true; btn.textContent = "Enviando…";
+    try {
+      await data.createBooking({ name, phone, serviceId: service.id, service: service.name, date, time, duration: Number(service.duration), price: Number(service.price), workerId: worker.id });
+      try { localStorage.setItem("bc_last", String(Date.now())); localStorage.removeItem("bc_phone_prefill"); } catch (_) {}
+
+      showMsg(`Tu cita quedó registrada: ${service.name} el ${prettyDate(date)} a las ${time} con ${worker.nombre || "tu barbero"}. En cuanto ${CONFIG.name} la confirme, te avisamos por WhatsApp o por teléfono.`, "ok");
+      $("bookingForm").reset();
+      $("dateSelect").min = todayString();
+      $("timeSelect").innerHTML = `<option value="">Selecciona servicio, barbero y fecha</option>`;
+      $("bookingMessage").scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) {
+      console.error(error);
+      if (error && (error.code === "23505" || String(error.message || "").includes("duplicate"))) { showMsg("Ese horario acaba de ser ocupado por otra persona. Elige otro horario.", "err"); refreshTimes(); }
+      else { const detail = [error?.message, error?.details, error?.hint].filter(Boolean).join(" | "); showMsg(`No pudimos registrar tu cita: ${detail || "error desconocido"}`, "err"); }
+    } finally { btn.disabled = false; btn.textContent = "Solicitar cita"; }
+  });
+
+  /* =====================================================================
+     ACCESO DEL EQUIPO + PANEL PRIVADO
+  ===================================================================== */
+  let currentUser = null, currentProfile = null, lastFocus = null;
+  let appointments = [], adminWorkers = [], adminServices = [];
+  let adminConfig = { days: CONFIG.hours, blockedDates: [] };
+  const isOwner = () => !!currentProfile && currentProfile.rol === "owner";
+
+  function loginMsg(text, type) { $("loginMessage").innerHTML = text ? `<div class="rounded-xl px-4 py-3 mb-4 text-sm border ${type === "ok" ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200" : "border-red-500/30 bg-red-500/10 text-red-200"}">${esc(text)}</div>` : ""; }
+  function openModal(id) { lastFocus = document.activeElement; $(id).classList.add("show"); document.body.style.overflow = "hidden"; const f = $(id).querySelector("input,button"); if (f) f.focus(); }
+  function closeModal(id) { $(id).classList.remove("show"); if (!$("loginModal").classList.contains("show") && !$("waModal").classList.contains("show")) document.body.style.overflow = ""; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+
+  $("loginBtn").onclick = () => openModal("loginModal");
+  $("loginBtnFooter").onclick = () => openModal("loginModal");
+  $("closeLogin").onclick = () => closeModal("loginModal");
+  $("loginModal").addEventListener("click", e => { if (e.target === $("loginModal")) closeModal("loginModal"); });
+  $("closeWa").onclick = () => closeModal("waModal");
+  $("waModal").addEventListener("click", e => { if (e.target === $("waModal")) closeModal("waModal"); });
+  document.addEventListener("keydown", e => {
+    const openOne = ["loginModal", "waModal"].find(id => $(id).classList.contains("show"));
+    if (!openOne) return;
+    if (e.key === "Escape") return closeModal(openOne);
+    if (e.key === "Tab") {
+      const f = [...$(openOne).querySelectorAll("button, input, a")].filter(x => !x.disabled);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault(); loginMsg("");
+    if (!sb) return loginMsg("Modo demostración: conecta Supabase para habilitar el acceso del equipo.", "err");
+    $("loginSubmit").disabled = true;
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email: $("loginEmail").value.trim(), password: $("loginPassword").value });
+      if (error) throw error;
+      $("loginPassword").value = ""; closeModal("loginModal");
+    } catch (error) { console.error("Supabase Auth:", error.message); loginMsg(`No se pudo ingresar: ${error.message || "correo o contraseña incorrectos"}`, "err"); }
+    finally { $("loginSubmit").disabled = false; }
+  });
+  $("resetPass").onclick = async () => {
+    const email = $("loginEmail").value.trim();
+    if (!sb) return loginMsg("Modo demostración.", "err");
+    if (!email) return loginMsg("Escribe tu correo arriba y vuelve a pulsar esta opción.", "err");
+    try { await sb.auth.resetPasswordForEmail(email); } catch (_) {}
+    loginMsg("Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.", "ok");
+  };
+
+  async function loadPrivate() {
+    if (!currentUser) return;
+    let profile = null;
+    try { const { data: row, error } = await sb.from("profiles").select("*").eq("id", currentUser.id).maybeSingle(); if (error) throw error; profile = row; }
+    catch (e) { console.error(e); }
+    if (!profile || !["owner", "barbero"].includes(profile.rol) || profile.activo !== true) {
+      const uid = currentUser.id;
+      await sb.auth.signOut();
+      openModal("loginModal");
+      loginMsg(`Tu cuenta no tiene acceso autorizado al panel. UID: ${uid}`, "err");
+      return;
+    }
+    currentProfile = profile;
+    document.body.classList.add("is-admin");
+    $("adminApp").classList.add("show");
+    $("roleLabel").textContent = isOwner() ? "Propietario" : "Barbero";
+    $("userEmailLabel").textContent = currentUser.email || "";
+    document.querySelectorAll("[data-owner-only]").forEach(el => { el.style.display = isOwner() ? "" : "none"; });
+    $("adminWarn").innerHTML = (!CONFIG.address || !CONFIG.phone) ? `<div class="warn-bar">Faltan datos del negocio (dirección/teléfono) en CONFIG — revisa el bloque CONFIG al inicio del &lt;script&gt;.</div>` : "";
+    await loadPrivateData();
+    showPanel("dashboard");
+    window.scrollTo(0, 0);
+  }
+
+  async function loadPrivateData() {
+    try {
+      let q = sb.from("citas").select("*").order("date", { ascending: false }).order("time", { ascending: false });
+      if (!isOwner()) {
+        const { data: myBarber } = await sb.from("barberos").select("id").eq("profile_id", currentUser.id).maybeSingle();
+        q = q.eq("worker_id", myBarber ? myBarber.id : -1);
+      }
+      const { data: rows, error } = await q;
+      if (error) throw error;
+      appointments = rows.map(r => ({ id: r.id, name: r.name, phone: r.phone, service: r.service, date: r.date, time: r.time, duration: r.duration, price: r.price, workerId: r.worker_id, status: r.status }));
+    } catch (e) { console.error(e); appointments = []; toast("No se pudieron cargar las citas."); }
+
+    try { const { data: rows, error } = await sb.from("barberos").select("*").order("nombre"); if (error) throw error; adminWorkers = isOwner() ? rows : rows.filter(w => w.activo); }
+    catch (e) { adminWorkers = []; }
+
+    if (isOwner()) {
+      try { const { data: rows, error } = await sb.from("servicios").select("*").order("name"); if (error) throw error; adminServices = rows; } catch (e) { console.error(e); }
+      try { adminConfig = await data.config(); if (!adminConfig.days) adminConfig.days = CONFIG.hours; } catch (e) {}
+      renderWorkers(); renderServices(); renderSchedule();
+    }
+    renderDashboard(); renderAppointments();
+  }
+
+  const workerObj = id => adminWorkers.find(w => w.id == id) || {};
+  const workerName = id => workerObj(id).nombre || "Barbero";
+  const STATUS_LABEL = { pending: "Pendiente", confirmed: "Confirmada", completed: "Completada", cancelled: "Cancelada" };
+  const badge = st => `<span class="badge ${esc(st)}">${esc(STATUS_LABEL[st] || st)}</span>`;
+  const nowKey = () => { const n = new Date(); return `${toDateStr(n)}${pad(n.getHours())}:${pad(n.getMinutes())}`; };
+
+  function renderDashboard() {
+    const active = appointments.filter(a => a.status !== "cancelled");
+    const completed = appointments.filter(a => a.status === "completed");
+    $("mTotal").textContent = active.length;
+    $("mPending").textContent = appointments.filter(a => a.status === "pending").length;
+    $("mDone").textContent = completed.length;
+    $("mIncome").textContent = money(completed.reduce((t, a) => t + Number(a.price || 0), 0));
+    const upcoming = appointments.filter(a => a.status !== "cancelled" && a.status !== "completed" && `${a.date}${a.time}` >= nowKey()).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`)).slice(0, 8);
+    $("dashboardUpcoming").innerHTML = upcoming.length
+      ? `<div class="table-wrap"><table class="adm-table"><thead><tr><th>Cliente</th><th>Fecha</th><th>Hora</th><th>Servicio</th><th>Estado</th></tr></thead><tbody>${upcoming.map(a => `<tr><td>${esc(a.name)}</td><td>${esc(a.date)}</td><td>${esc(a.time)}</td><td>${esc(a.service)}</td><td>${badge(a.status)}</td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="empty">No hay próximas citas.</div>`;
+  }
+
+  function renderAppointments() {
+    const search = ($("appointmentSearch").value || "").toLowerCase();
+    const status = $("statusFilter").value || "";
+    const list = appointments.filter(a => (!search || `${a.name} ${a.phone}`.toLowerCase().includes(search)) && (!status || a.status === status)).sort((a, b) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`));
+    if (!list.length) { $("appointmentsBody").innerHTML = `<tr><td colspan="8" class="empty">No hay citas.</td></tr>`; return; }
+    $("appointmentsBody").innerHTML = list.map(a => {
+      const open = a.status === "pending" || a.status === "confirmed";
+      return `<tr>
+        <td><b>${esc(a.name)}</b><br><small class="adm-muted">${esc(a.phone)}</small></td>
+        <td>${esc(a.service)}</td><td>${esc(workerName(a.workerId))}</td><td>${esc(a.date)}</td><td>${esc(a.time)}</td><td>${money(a.price)}</td><td>${badge(a.status)}</td>
+        <td><div class="row-actions">
+          ${a.status === "pending" ? `<button class="abtn gold" data-act="confirmed" data-id="${esc(a.id)}">Confirmar</button>` : ""}
+          ${open ? `<button class="abtn" data-act="completed" data-id="${esc(a.id)}">Completar</button>` : ""}
+          ${open ? `<button class="abtn danger" data-act="cancelled" data-id="${esc(a.id)}">Cancelar</button>` : ""}
+          ${a.status === "confirmed" ? `<button class="abtn wa" data-act="wa" data-id="${esc(a.id)}">WhatsApp</button>` : ""}
+          ${isOwner() ? `<button class="abtn danger" data-act="delete" data-id="${esc(a.id)}" title="Elimina los datos personales de esta cita">Eliminar</button>` : ""}
+        </div></td></tr>`;
+    }).join("");
+  }
+
+  $("appointmentsBody").addEventListener("click", e => {
+    const b = e.target.closest("[data-act]");
+    if (!b) return;
+    const appt = appointments.find(a => a.id == b.dataset.id);
+    if (b.dataset.act === "delete") return deleteAppointment(b.dataset.id);
+    if (b.dataset.act === "wa") return openWaModal(appt);
+    setStatus(b.dataset.id, b.dataset.act, appt);
+  });
+
+  async function setStatus(id, status, appt) {
+    if (status === "cancelled" && !confirm("¿Cancelar esta cita? Se libera el horario.")) return;
+    try {
+      const { error } = await sb.from("citas").update({ status }).eq("id", id);
+      if (error) throw error;
+      await loadPrivateData();
+      toast("Cita actualizada.");
+      if (status === "confirmed" && appt) openWaModal({ ...appt, status: "confirmed" });
+    } catch (e) { console.error(e); toast("No se pudo actualizar la cita."); }
+  }
+  async function deleteAppointment(id) {
+    if (!confirm("¿Eliminar definitivamente esta cita y los datos personales del cliente? No se puede deshacer.")) return;
+    try { const { error } = await sb.from("citas").delete().eq("id", id); if (error) throw error; await loadPrivateData(); toast("Cita eliminada."); }
+    catch (e) { console.error(e); toast("No se pudo eliminar la cita."); }
+  }
+  $("appointmentSearch").oninput = renderAppointments;
+  $("statusFilter").onchange = renderAppointments;
+
+  $("purgeOld").onclick = async () => {
+    const d = new Date(); d.setMonth(d.getMonth() - CONFIG.business.retentionMonths);
+    const cutoff = toDateStr(d);
+    const old = appointments.filter(a => a.date < cutoff);
+    if (!old.length) return toast(`No hay citas con más de ${CONFIG.business.retentionMonths} meses.`);
+    if (!confirm(`Se eliminarán definitivamente ${old.length} cita(s) anteriores a ${cutoff}, con los datos personales de los clientes. No se puede deshacer. ¿Continuar?`)) return;
+    try { const { error } = await sb.from("citas").delete().lt("date", cutoff); if (error) throw error; await loadPrivateData(); toast(`${old.length} cita(s) antigua(s) eliminada(s).`); }
+    catch (e) { console.error(e); toast("No se pudieron depurar las citas."); }
+  };
+
+  /* ---- Aviso por WhatsApp al confirmar una cita ----
+     WhatsApp no permite enviar mensajes en automático desde una página web:
+     solo abre una conversación ya redactada y la persona (tú o el cliente)
+     debe pulsar "Enviar". Por eso, al confirmar, se ofrecen dos botones
+     listos para mandar el aviso con un clic. */
+  function openWaModal(appt) {
+    if (!appt) return;
+    const worker = workerObj(appt.workerId);
+    const clientMsg = `Hola ${appt.name}, tu cita en ${CONFIG.name} quedó confirmada: ${appt.service} el ${prettyDate(appt.date)} a las ${appt.time}. Te esperamos.`;
+    const barberMsg = `Hola ${worker.nombre || ""}, tienes una cita confirmada: ${appt.name} — ${appt.service} el ${prettyDate(appt.date)} a las ${appt.time}.`;
+    const clientHref = waLink(appt.phone, clientMsg);
+    const barberHref = waLink(worker.whatsapp, barberMsg);
+
+    $("waSummary").textContent = `${appt.name} — ${appt.service} · ${prettyDate(appt.date)} a las ${appt.time} con ${worker.nombre || "el barbero"}.`;
+
+    const clientBtn = $("waClientBtn"), barberBtn = $("waBarberBtn");
+    if (clientHref) { clientBtn.href = clientHref; clientBtn.style.display = ""; } else { clientBtn.removeAttribute("href"); clientBtn.style.display = "none"; }
+    if (barberHref) { barberBtn.href = barberHref; barberBtn.style.display = ""; } else { barberBtn.removeAttribute("href"); barberBtn.style.display = "none"; }
+
+    const hints = [];
+    if (!clientHref) hints.push("El cliente no dejó un teléfono válido.");
+    if (!barberHref) hints.push(`${worker.nombre || "Este barbero"} no tiene WhatsApp guardado (agrégalo en Barberos).`);
+    $("waHint").textContent = hints.join(" ");
+
+    openModal("waModal");
+  }
+
+  /* ---- Barberos ---- */
+  function renderWorkers() {
+    if (!adminWorkers.length) { $("workersList").innerHTML = `<div class="empty" style="grid-column:1/-1">No hay barberos registrados. Agrega el primero arriba.</div>`; return; }
+    $("workersList").innerHTML = adminWorkers.map(w => `
+      <div class="adm-card"><h3>${esc(w.nombre || "Barbero")}</h3>
+        <p class="adm-muted" style="margin:6px 0">${w.whatsapp ? "WhatsApp: " + esc(w.whatsapp) : "Sin WhatsApp guardado"}</p>
+        <p style="margin:8px 0">${w.activo ? `<span class="badge completed">Activo</span>` : `<span class="badge cancelled">Inactivo</span>`}</p>
+        <div class="row-actions"><button class="abtn" data-w-toggle="${esc(w.id)}">${w.activo ? "Desactivar" : "Activar"}</button></div>
+      </div>`).join("");
+  }
+  $("workersList").addEventListener("click", async e => {
+    const b = e.target.closest("[data-w-toggle]"); if (!b) return;
+    const w = adminWorkers.find(x => x.id == b.dataset.wToggle); if (!w) return;
+    try { const { error } = await sb.from("barberos").update({ activo: !w.activo }).eq("id", w.id); if (error) throw error; await loadPrivateData(); }
+    catch (err) { console.error(err); toast("No se pudo actualizar al barbero."); }
+  });
+  $("workerForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const nombre = $("workerName").value.trim();
+    const uid = $("workerUid").value.trim();
+    const phone = $("workerPhone").value.trim();
+    if (nombre.length < 2) return;
+    try {
+      const row = { nombre, activo: true };
+      if (uid) row.profile_id = uid;
+      if (phone) row.whatsapp = phone;
+      const { error } = await sb.from("barberos").insert(row);
+      if (error) throw error;
+      $("workerForm").reset(); await loadPrivateData(); toast("Barbero agregado.");
+    } catch (err) {
+      console.error(err);
+      toast(String(err.message || "").includes("whatsapp") ? "No se pudo guardar: falta la columna 'whatsapp' en la tabla barberos." : "No se pudo agregar al barbero.");
+    }
+  });
+
+  /* ---- Servicios ---- */
+  function renderServices() {
+    if (!adminServices.length) { $("servicesBody").innerHTML = `<tr><td colspan="5" class="empty">No hay servicios. Agrega uno o carga los de ejemplo.</td></tr>`; return; }
+    $("servicesBody").innerHTML = adminServices.map(sv => `<tr><td>${esc(sv.name)}</td><td>${money(sv.price)}</td><td>${esc(sv.duration)} min</td><td>${sv.active !== false ? "Sí" : "No"}</td>
+      <td><div class="row-actions"><button class="abtn" data-s-edit="${esc(sv.id)}">Editar</button><button class="abtn danger" data-s-del="${esc(sv.id)}">Eliminar</button></div></td></tr>`).join("");
+  }
+  $("servicesBody").addEventListener("click", async e => {
+    const ed = e.target.closest("[data-s-edit]"), del = e.target.closest("[data-s-del]");
+    if (ed) { const sv = adminServices.find(x => x.id == ed.dataset.sEdit); if (!sv) return;
+      $("serviceId").value = sv.id; $("serviceName").value = sv.name; $("servicePrice").value = sv.price; $("serviceDuration").value = sv.duration; $("serviceActive").value = String(sv.active !== false); $("serviceName").focus(); }
+    if (del) { if (!confirm("¿Eliminar este servicio?")) return;
+      try { const { error } = await sb.from("servicios").delete().eq("id", del.dataset.sDel); if (error) throw error; await loadPrivateData(); }
+      catch (err) { console.error(err); toast("No se pudo eliminar el servicio."); } }
+  });
+  $("clearService").onclick = () => { $("serviceForm").reset(); $("serviceId").value = ""; };
+  $("serviceForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const id = $("serviceId").value;
+    const payload = { name: $("serviceName").value.trim(), price: Number($("servicePrice").value), duration: Number($("serviceDuration").value), active: $("serviceActive").value === "true" };
+    try { const { error } = id ? await sb.from("servicios").update(payload).eq("id", id) : await sb.from("servicios").insert(payload); if (error) throw error;
+      $("serviceForm").reset(); $("serviceId").value = ""; await loadPrivateData(); toast("Servicio guardado."); }
+    catch (err) { console.error(err); toast("No se pudo guardar el servicio."); }
+  });
+  $("seedServices").onclick = async () => {
+    if (adminServices.length && !confirm("Ya tienes servicios. ¿Agregar también los de ejemplo?")) return;
+    try { const { error } = await sb.from("servicios").insert(CONFIG.defaultServices); if (error) throw error; await loadPrivateData(); toast("Servicios de ejemplo cargados."); }
+    catch (err) { console.error(err); toast("No se pudieron cargar los servicios."); }
+  };
+
+  /* ---- Horarios ---- */
+  function renderSchedule() {
+    const days = adminConfig.days || CONFIG.hours;
+    $("scheduleGrid").innerHTML = DAY_ORDER.map(day => {
+      const v = days[day] || CONFIG.hours[day];
+      return `<div class="adm-card sch-row"><strong>${DAY_LABEL[day]}</strong>
+        <label style="margin:0;display:flex;gap:6px;align-items:center;font-size:.85rem"><input type="checkbox" data-day="${day}" data-key="active" ${v.active ? "checked" : ""}> Abierto</label>
+        <input type="time" class="bc-input" aria-label="Apertura ${DAY_LABEL[day]}" data-day="${day}" data-key="start" value="${esc(v.start)}">
+        <input type="time" class="bc-input" aria-label="Cierre ${DAY_LABEL[day]}" data-day="${day}" data-key="end" value="${esc(v.end)}"></div>`;
+    }).join("");
+    renderBlocked();
+  }
+  function renderBlocked() {
+    const list = [...(adminConfig.blockedDates || [])].sort();
+    $("blockedChips").innerHTML = list.length ? list.map(d => `<span class="chip">${esc(d)}<button type="button" data-unblock="${esc(d)}" aria-label="Quitar ${esc(d)}">×</button></span>`).join("") : `<span class="adm-muted">Sin fechas bloqueadas.</span>`;
+  }
+  $("addBlock").onclick = () => { const d = $("blockDate").value; if (!d) return; adminConfig.blockedDates = [...new Set([...(adminConfig.blockedDates || []), d])]; $("blockDate").value = ""; renderBlocked(); };
+  $("blockedChips").addEventListener("click", e => { const b = e.target.closest("[data-unblock]"); if (!b) return; adminConfig.blockedDates = (adminConfig.blockedDates || []).filter(d => d !== b.dataset.unblock); renderBlocked(); });
+  $("saveSchedule").onclick = async () => {
+    const days = {}; let invalid = false;
+    document.querySelectorAll("#scheduleGrid [data-day]").forEach(el => { const d = el.dataset.day; days[d] = days[d] || { ...CONFIG.hours[d] }; days[d][el.dataset.key] = el.type === "checkbox" ? el.checked : el.value; });
+    Object.values(days).forEach(v => { if (v.active && (!v.start || !v.end || v.start >= v.end)) invalid = true; });
+    if (invalid) return toast("Revisa los horarios: la apertura debe ser antes del cierre.");
+    try {
+      const { data: saved, error } = await sb.from("configuracion").update({ days, blocked_dates: adminConfig.blockedDates || [] }).eq("id", "general").select();
+      if (error) throw error;
+      if (!saved || !saved.length) return toast("No se guardó: falta la fila id='general' en la tabla configuracion.");
+      adminConfig.days = days; toast("Horarios guardados.");
+    } catch (e) { console.error(e); toast("No se pudieron guardar los horarios."); }
+  };
+
+  /* ---- navegación del panel ---- */
+  const TITLES = { dashboard: "Dashboard", appointments: "Citas", workers: "Barberos", services: "Servicios", schedule: "Horarios" };
+  function showPanel(name) {
+    const panel = $("panel-" + name);
+    if (panel && panel.hasAttribute("data-owner-panel") && !isOwner()) name = "dashboard";
+    document.querySelectorAll(".adm-panel").forEach(pn => pn.classList.remove("active"));
+    $("panel-" + name).classList.add("active");
+    document.querySelectorAll(".side-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === name));
+    $("panelTitle").textContent = TITLES[name] || "Panel";
+  }
+  document.querySelectorAll(".side-btn").forEach(b => { b.onclick = () => showPanel(b.dataset.panel); });
+  $("logoutBtn").onclick = () => { if (sb) sb.auth.signOut(); };
+
+  if (sb) {
+    sb.auth.onAuthStateChange((_event, session) => {
+      currentUser = session ? session.user : null;
+      setTimeout(async () => { if (currentUser) await loadPrivate(); else if (currentProfile) location.reload(); }, 0);
+    });
+  }
+
+  /* ===== inicio ===== */
+  async function init() {
+    applyConfig();
+    if (DEMO) $("demoBanner").innerHTML = `<div style="background:#2a2110;border:1px solid #5a4516;color:#f1d17c;padding:10px 14px;border-radius:10px;font-size:.82rem;margin-bottom:16px">Modo demostración: las reservas se guardan solo en esta ventana y se pierden al recargar.</div>`;
+    try { const prefill = localStorage.getItem("bc_phone_prefill"); if (prefill) $("clientPhone").value = prefill; } catch (_) {}
+
+    renderStaticBlocks();
+    renderContact();
+    renderLegal();
+    watchReveal();
+
+    try { bookingConfig = await data.config(); } catch (e) { console.error(e); }
+    await Promise.all([renderPricing(), renderTeam()]);
+    watchReveal();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
